@@ -5,7 +5,7 @@ from constants import *
 from switch import Switch
 from grid import Grid
 from textbox import TextBox
-from image import format_path, verify_extension
+from image import ImageProcessing
 
 class App:
     def __init__(self) -> None:
@@ -14,7 +14,7 @@ class App:
         # Screen
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sorting Algorithm Visualisation")
-        self.icon = pygame.image.load("images/ICON.png").convert_alpha()
+        self.icon = pygame.image.load("images/app_assets/ICON.png").convert_alpha()
         pygame.display.set_icon(self.icon)
 
         # Fonts
@@ -58,6 +58,7 @@ class App:
 
         # Pasting Image Path
         self.textbox_switch.get_clicked()
+
         if self.textbox_switch.active:
             self.img_path.set_text(paste())
         else:
