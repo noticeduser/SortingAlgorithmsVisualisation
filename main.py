@@ -5,6 +5,7 @@ from constants import *
 from switch import Switch
 from grid import Grid
 from textbox import TextBox
+from image import format_path, verify_extension
 
 class App:
     def __init__(self) -> None:
@@ -28,12 +29,13 @@ class App:
         # Surfaces, Rectangles And Text
         self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 10, 10)
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
-
         self.grid_enable_text = self.gui_font.render("GRIDLINES", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1]))
 
         self.img_path = TextBox(25, (BARRIER_PADDING + 50, 50), BLACK, self.gui_font)
-        self.textbox_switch = Switch("OPEN", "Paste", RED, GREEN, self.button_font, (50, 25), (BARRIER_PADDING + 25, 50))
+        self.textbox_switch = Switch("OK", "Paste", GREEN, RED, self.button_font, (50, 25), (BARRIER_PADDING + 25, 50))
+        self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
+        self.invalid_entry_rect = self.invalid_entry.get_rect(bottomleft = (BARRIER_PADDING, 25) )
 
     def run(self):
         while self.running:
@@ -56,7 +58,6 @@ class App:
 
         # Pasting Image Path
         self.textbox_switch.get_clicked()
-    
         if self.textbox_switch.active:
             self.img_path.set_text(paste())
         else:
