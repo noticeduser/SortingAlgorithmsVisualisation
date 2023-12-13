@@ -32,8 +32,8 @@ class App:
         self.grid_enable_text = self.gui_font.render("GRIDLINES", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1]))
 
-        self.img_path = TextBox(25, (BARRIER_PADDING + 50, HEIGHT - 50), BLACK, self.gui_font)
-        self.textbox_switch = Switch("OPEN", "Paste", RED, GREEN, self.button_font, (50, 25), (BARRIER_PADDING + 25, HEIGHT - 50))
+        self.img_path = TextBox(25, (BARRIER_PADDING + 50, 50), BLACK, self.gui_font)
+        self.textbox_switch = Switch("OPEN", "Paste", RED, GREEN, self.button_font, (50, 25), (BARRIER_PADDING + 25, 50))
 
     def run(self):
         while self.running:
