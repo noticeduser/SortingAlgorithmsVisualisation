@@ -12,5 +12,5 @@ class ImageProcessing:
         self.return_path = f"images/user_images/{self.img_name}"
 
 
-image_object = ImageProcessing("C:/Users/notic/OneDrive/Desktop/scp.jpg")
+image_object = ImageProcessing("C:/Users/Culle/Desktop/assets/joey.jpg")
 print(image_object.return_path)

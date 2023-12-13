@@ -13,7 +13,7 @@ class App:
         # Screen
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sorting Algorithm Visualisation")
-        self.icon = pygame.image.load("ICON.png").convert_alpha()
+        self.icon = pygame.image.load("images/ICON.png").convert_alpha()
         pygame.display.set_icon(self.icon)
 
         # Fonts
