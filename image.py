@@ -1,5 +1,6 @@
 from PIL import Image
 import os
+from constants import *
 
 class ImageProcessing:
     def __init__(self):
@@ -14,8 +15,11 @@ class ImageProcessing:
         self.img_path = self.format_path(path)
         self.img = Image.open(self.img_path)
         self.img_name = os.path.basename(path)[:-4]
-        self.img_size = self.img.size
         self.return_path = f"images/user_images/{self.img_name}"
+        self.img_size = self.img.size
+        
+        if self.img_size != GRID_DIMENSIONS:
+            self.crop_image()
 
     def verify_extension(path):
         extension = os.path.splitext(path)[1]
@@ -27,6 +31,10 @@ class ImageProcessing:
         path_raw_str = r"{}".format(path)
         formatted_path = path_raw_str.replace("\\", "/")
         return formatted_path
+    
+    def crop_image(self):
+        self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
+
 
 
 
