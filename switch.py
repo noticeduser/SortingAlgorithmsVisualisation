@@ -13,10 +13,8 @@ class Switch:
 
         # Text
         text_size = (size[0] // 2, size[1] // 2)
-
         self.primary_text = font.render(primary_text, True, WHITE)
-        self.primary_text_rect = self.primary_text.get_rect(center= text_size)
-
+        self.primary_text_rect = self.primary_text.get_rect(center=text_size)
         self.secondary_text = font.render(secondary_text, True, WHITE)
         self.secondary_text_rect = self.secondary_text.get_rect(center=text_size)
 
