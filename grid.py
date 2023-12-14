@@ -53,7 +53,7 @@ class Grid:
     def get_surface_and_rect(self):
         return (
             self.gridlines_surface,
-            self.gridlines_surface.get_rect(midleft=(BARRIER_PADDING, HEIGHT / 2)),
+            self.gridlines_surface.get_rect(midleft=(BARRIER_PADDING, HEIGHT // 2)),
         )
 
     # Handles the transparency of the gridlines
