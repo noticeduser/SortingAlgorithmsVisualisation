@@ -109,6 +109,7 @@ class App:
                 try:
                     if self.img.verify_extension(r"{}".format(paste())):
                         self.img.update_img(paste())
+                        self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
                         self.img_empty = False
                     else:
                         self.screen.blit(self.invalid_entry, self.invalid_entry_rect)

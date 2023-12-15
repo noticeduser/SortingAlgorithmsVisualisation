@@ -15,8 +15,8 @@ class Grid:
         print(self.block_size)
 
     def set_row_column_spacing(self):
-        row_spacing = self.height / self.rows
-        column_spacing = self.width / self.columns
+        row_spacing = self.height // self.rows
+        column_spacing = self.width // self.columns
 
         return (row_spacing, column_spacing)
 
