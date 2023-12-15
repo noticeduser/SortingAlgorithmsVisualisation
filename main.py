@@ -59,7 +59,7 @@ class App:
             bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 10)
         )
 
-        self.not_added = self.gui_font.render("AN IMAGE HAS NOT BEEN ADDED", True, RED)
+        self.not_added = self.gui_font.render("IMAGE NOT ADDED", True, RED)
         self.not_added_rect = self.not_added.get_rect(
             bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 10)
         )
@@ -69,7 +69,7 @@ class App:
             bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 85)
         )
 
-        self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST!", True, RED)
+        self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED)
         self.invalid_path_rect = self.invalid_path.get_rect(
             bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 85)
         )
