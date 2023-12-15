@@ -28,7 +28,7 @@ class App:
         self.running = True
 
         # Grid intialized
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 10, 10)
+        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 3, 3)
         self.gridlines_switch = Switch(
             "ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50)
         )
