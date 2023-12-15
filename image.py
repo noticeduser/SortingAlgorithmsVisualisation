@@ -11,7 +11,9 @@ class ImageProcessing:
         self.img_size = None
         self.return_path = None
 
+    # Image Processing Methods
     def split_into_blocks(self, num_rows, num_columns, row_spacing, column_spacing):
+        os.mkdir(self.return_path)
         if self.img_size != GRID_DIMENSIONS:
             self.crop_image()
 
@@ -26,6 +28,11 @@ class ImageProcessing:
                 print("{self.return_path}/block_{row}_{col}.png")
                 block.save(f"{self.return_path}/block_{row}_{col}.png")
 
+    def crop_image(self):
+        self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
+        self.img_size = self.img.size
+
+    # Utility Methods
     def format_path(self, path):
         path_raw_str = r"{}".format(path)
         formatted_path = path_raw_str.replace("\\", "/")
@@ -44,15 +51,11 @@ class ImageProcessing:
             path = path.replace('"', "")
         return path
 
-    def crop_image(self):
-        self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
-        self.img_size = self.img.size
-
+    # Image Loading and Updating Methods
     def update_img(self, path):
         path = self.check_quotations(path)
         self.img_path = self.format_path(path)
         self.img = Image.open(self.img_path)
         self.img_name = os.path.basename(path)[:-4]
         self.return_path = f"images/user_images/{self.img_name}"
-        os.mkdir(self.return_path)
         self.img_size = self.img.size
