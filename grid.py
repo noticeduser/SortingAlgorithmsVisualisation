@@ -11,6 +11,8 @@ class Grid:
         self.row_spacing, self.column_spacing = self.set_row_column_spacing()
         self.block_size = self.row_spacing * self.column_spacing
         self.gridlines_surface = self.draw_gridlines()
+        self.image_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        self.block_objects = []
 
         print(self.block_size)
 
@@ -53,8 +55,10 @@ class Grid:
     def get_surface_and_rect(self):
         return (
             self.gridlines_surface,
-            self.gridlines_surface.get_rect(midleft=(BARRIER_PADDING, HEIGHT // 2)),
+            self.gridlines_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2)),
         )
+    def get_images(self):
+        return (self.image_surface, self.image_surface.get_rect(center = (WIDTH // 2, HEIGHT // 2)))
 
     # Handles the transparency of the gridlines
     def set_alpha_min(self):

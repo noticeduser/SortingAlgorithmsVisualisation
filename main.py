@@ -6,6 +6,7 @@ from switch import Switch
 from grid import Grid
 from textbox import TextBox
 from image import ImageProcessing
+from block import Block
 
 
 class App:
@@ -43,7 +44,7 @@ class App:
         # Image Initialized
         self.img = ImageProcessing()
         self.img_empty = None
-        self.img_path = TextBox(25, (BARRIER_PADDING + 50, 50), BLACK, self.gui_font)
+        self.img_path = TextBox(25, (BARRIER_PADDING_X + 50, 50), BLACK, self.gui_font)
         self.textbox_switch = Switch(
             "ADD",
             "DEL",
@@ -51,27 +52,27 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (BARRIER_PADDING + 25, 50),
+            (BARRIER_PADDING_X + 25, 50),
         )
 
         self.added_text = self.gui_font.render("IMAGE ADDED", True, GREEN)
         self.added_text_rect = self.added_text.get_rect(
-            bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 10)
+            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10)
         )
 
         self.not_added = self.gui_font.render("IMAGE NOT ADDED", True, RED)
         self.not_added_rect = self.not_added.get_rect(
-            bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 10)
+            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10)
         )
 
         self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
         self.invalid_entry_rect = self.invalid_entry.get_rect(
-            bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 85)
+            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85)
         )
 
         self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED)
         self.invalid_path_rect = self.invalid_path.get_rect(
-            bottomleft=(BARRIER_PADDING, BARRIER_PADDING_Y - 85)
+            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85)
         )
 
     def run(self):
@@ -110,10 +111,15 @@ class App:
                     if self.img.verify_extension(r"{}".format(paste())):
                         self.img.update_img(paste())
                         self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
+                        for i in self.img.blocks:
+                            block = Block(i[0],i[1],i[2], self.grid.row_spacing, self.grid.column_spacing, i[3])
+                            block.draw_block(self.grid.image_surface)
+                            self.grid.block_objects.append(block)
+
                         self.img_empty = False
                     else:
                         self.screen.blit(self.invalid_entry, self.invalid_entry_rect)
-                except:
+                except FileNotFoundError:
                     self.screen.blit(self.invalid_path, self.invalid_path_rect)
 
         self.clock.tick(FPS)
@@ -124,6 +130,9 @@ class App:
         self.screen.fill(DARK_GRAY)
         self.screen.blit(
             self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1]
+        )
+        self.screen.blit(
+            self.grid.get_images()[0], self.grid.get_images()[1]
         )
         self.screen.blit(self.grid_enable_text, self.grid_enable_text_rect)
         self.screen.blit(
@@ -136,6 +145,7 @@ class App:
             self.img_path.get_surface_and_rect()[1],
         )
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
+
 
     def close(self):
         pygame.quit()

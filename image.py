@@ -10,6 +10,7 @@ class ImageProcessing:
         self.img_name = None
         self.img_size = None
         self.return_path = None
+        self.blocks = []
 
     # Image Processing Methods
     def split_into_blocks(self, num_rows, num_columns, row_spacing, column_spacing):
@@ -17,6 +18,7 @@ class ImageProcessing:
         if self.img_size != GRID_DIMENSIONS:
             self.crop_image()
 
+        value = 0
         for row in range(num_rows):
             for col in range(num_columns):
                 left = col * row_spacing
@@ -24,9 +26,13 @@ class ImageProcessing:
                 right = left + row_spacing
                 lower = upper + column_spacing
 
-                block = self.img.crop((left, upper, right, lower))
-                print("{self.return_path}/block_{row}_{col}.png")
-                block.save(f"{self.return_path}/block_{row}_{col}.png")
+                block_img = self.img.crop((left, upper, right, lower))
+                block_path = f"{self.return_path}/block_{row}_{col}.png"
+                print(block_path)
+                block_img.save(block_path)
+                self.blocks.append((block_path, row, col, value))
+                value += 1
+    
 
     def crop_image(self):
         self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
@@ -42,7 +48,7 @@ class ImageProcessing:
         path = self.check_quotations(path)
 
         extension = os.path.splitext(path)[1]
-        if extension not in [".jpg", ".png"]:
+        if extension not in [".jpg", ".jpeg", ".png"]:
             return False
         return True
 
