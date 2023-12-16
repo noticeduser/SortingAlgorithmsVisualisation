@@ -129,10 +129,10 @@ class App:
         # Grid
         self.screen.fill(DARK_GRAY)
         self.screen.blit(
-            self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1]
+            self.grid.get_images()[0], self.grid.get_images()[1]
         )
         self.screen.blit(
-            self.grid.get_images()[0], self.grid.get_images()[1]
+            self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1]
         )
         self.screen.blit(self.grid_enable_text, self.grid_enable_text_rect)
         self.screen.blit(
