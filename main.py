@@ -6,7 +6,7 @@ from switch import Switch
 from grid import Grid
 from textbox import TextBox
 from image import ImageProcessing
-from block import Block
+from block import *
 
 
 class App:
@@ -29,7 +29,7 @@ class App:
         self.running = True
 
         # Grid intialized
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 3, 3)
+        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 5, 5)
         self.gridlines_switch = Switch(
             "ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50)
         )
@@ -75,6 +75,10 @@ class App:
             bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85)
         )
 
+        # Shuffling Image
+        self.shuffled = False
+        self.shuffle_switch = Switch("Shuffle", "Sort", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 100))
+
     def run(self):
         while self.running:
             self.update()
@@ -113,7 +117,7 @@ class App:
                         self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
                         for i in self.img.blocks:
                             block = Block(i[0],i[1],i[2], self.grid.row_spacing, self.grid.column_spacing, i[3])
-                            block.draw_block(self.grid.image_surface)
+                            #block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
 
                         self.img_empty = False
@@ -121,6 +125,16 @@ class App:
                         self.screen.blit(self.invalid_entry, self.invalid_entry_rect)
                 except FileNotFoundError:
                     self.screen.blit(self.invalid_path, self.invalid_path_rect)
+        
+        # Shuffling Image
+        self.shuffle_switch.get_clicked()
+
+        if self.shuffled == False:
+            if self.shuffle_switch.active:
+                pass
+            else:
+                shuffle_pos(self.grid.block_objects)
+                self.shuffled = True
 
         self.clock.tick(FPS)
         pygame.display.update()
@@ -147,6 +161,13 @@ class App:
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
 
 
+        # Image shuffling
+        self.screen.blit(self.shuffle_switch.surface, self.shuffle_switch.surface_rect)
+        for i in self.grid.block_objects:
+            i.draw_block(self.grid.image_surface)
+        for i in self.grid.block_objects:
+            print(f"pic {i.value}\told: {i.original_row},{i.original_column}\tnew: {i.row},{i.column}")
+        
     def close(self):
         pygame.quit()
         exit()
