@@ -117,7 +117,7 @@ class App:
                         self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
                         for i in self.img.blocks:
                             block = Block(i[0],i[1],i[2], self.grid.row_spacing, self.grid.column_spacing, i[3])
-                            #block.draw_block(self.grid.image_surface)
+                            block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
 
                         self.img_empty = False
@@ -134,6 +134,8 @@ class App:
                 pass
             else:
                 shuffle_pos(self.grid.block_objects)
+                for block in self.grid.block_objects:
+                    block.draw_block(self.screen)
                 self.shuffled = True
 
         self.clock.tick(FPS)
@@ -163,10 +165,12 @@ class App:
 
         # Image shuffling
         self.screen.blit(self.shuffle_switch.surface, self.shuffle_switch.surface_rect)
-        for i in self.grid.block_objects:
-            i.draw_block(self.grid.image_surface)
-        for i in self.grid.block_objects:
-            print(f"pic {i.value}\told: {i.original_row},{i.original_column}\tnew: {i.row},{i.column}")
+        # for i in self.grid.block_objects:
+        #     i.draw_block(self.grid.image_surface)
+        
+        # print(len(self.grid.block_objects))
+        # # for i in self.grid.block_objects:
+        # #     print(f"pic {i.value}\told: {i.original_row},{i.original_column}\tnew: {i.row},{i.column}")
         
     def close(self):
         pygame.quit()

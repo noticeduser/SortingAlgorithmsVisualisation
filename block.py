@@ -45,6 +45,8 @@ def shuffle_pos(blocks_lst):
        random.shuffle(rows_lst)
        random.shuffle(columns_lst)
 
+
+
        for block in blocks_lst:
               block.row = rows_lst[index_pos]
               block.column = columns_lst[index_pos]
