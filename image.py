@@ -1,5 +1,7 @@
 from PIL import Image
 import os
+import shutil
+import datetime
 from constants import *
 
 
@@ -56,12 +58,23 @@ class ImageProcessing:
         if path[0] == '"':
             path = path.replace('"', "")
         return path
-
+    
+    def get_time(self):
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y%m%d_%H%M%S")
+        return formatted_datetime
+    
+    def del_images(self):
+        folders = os.listdir("images/user_images/")
+        for folder in folders:
+            folder_path =  os.path.join("images/user_images/", folder)
+            shutil.rmtree(folder_path)
+    
     # Image Loading and Updating Methods
     def update_img(self, path):
         path = self.check_quotations(path)
         self.img_path = self.format_path(path)
         self.img = Image.open(self.img_path)
         self.img_name = os.path.basename(path)[:-4]
-        self.return_path = f"images/user_images/{self.img_name}"
+        self.return_path = f"images/user_images/{self.img_name}_{self.get_time()}"
         self.img_size = self.img.size

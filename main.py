@@ -88,6 +88,7 @@ class App:
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.img.del_images()
                 self.running = False
 
         # Gridlines Transparency
@@ -134,8 +135,6 @@ class App:
                 pass
             else:
                 shuffle_pos(self.grid.block_objects)
-                for block in self.grid.block_objects:
-                    block.draw_block(self.screen)
                 self.shuffled = True
 
         self.clock.tick(FPS)
