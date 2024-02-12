@@ -33,23 +33,11 @@ class Block:
 
 
 def shuffle_pos(blocks_lst):
+    positions = [(block.original_row, block.original_column) for block in blocks_lst]
+    random.shuffle(positions)
 
-       rows_lst = []
-       columns_lst = []
-       index_pos = 0
+    for block, (new_row, new_column) in zip(blocks_lst, positions):
+        block.row = new_row
+        block.column = new_column
 
-       for block in blocks_lst:
-              rows_lst.append(block.original_row)
-              columns_lst.append(block.original_column)
-              
-       random.shuffle(rows_lst)
-       random.shuffle(columns_lst)
-
-
-
-       for block in blocks_lst:
-              block.row = rows_lst[index_pos]
-              block.column = columns_lst[index_pos]
-              index_pos += 1
-       
-       return blocks_lst
+    return blocks_lst

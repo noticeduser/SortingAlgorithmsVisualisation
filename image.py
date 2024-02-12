@@ -77,4 +77,7 @@ class ImageProcessing:
         self.img = Image.open(self.img_path)
         self.img_name = os.path.basename(path)[:-4]
         self.return_path = f"images/user_images/{self.img_name}_{self.get_time()}"
+        print(self.return_path)
         self.img_size = self.img.size
+
+        self.blocks.clear()

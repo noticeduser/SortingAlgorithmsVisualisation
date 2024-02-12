@@ -58,7 +58,10 @@ class Grid:
             self.gridlines_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2)),
         )
     def get_images(self):
-        return (self.image_surface, self.image_surface.get_rect(center = (WIDTH // 2, HEIGHT // 2)))
+        return (
+            self.image_surface, 
+            self.image_surface.get_rect(center = (WIDTH // 2, HEIGHT // 2))
+        )
 
     # Handles the transparency of the gridlines
     def set_alpha_min(self):
