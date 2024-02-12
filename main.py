@@ -3,6 +3,7 @@ from clipboard import paste
 from sys import exit
 from constants import *
 from switch import Switch
+from button import Button
 from grid import Grid
 from textbox import TextBox
 from image import ImageProcessing
@@ -77,7 +78,7 @@ class App:
 
         # Shuffling Image
         self.shuffled = False
-        self.shuffle_switch = Switch("Shuffle", "Sort", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 100))
+        self.shuffle_button = Button(" ", GREEN, self.button_font, (50, 25), (WIDTH - 100, 100))
 
     def run(self):
         while self.running:
@@ -136,17 +137,23 @@ class App:
                     self.screen.blit(self.invalid_path, self.invalid_path_rect)
         
         # Shuffling Image
-        self.shuffle_switch.get_clicked()
+        self.shuffle_button.get_clicked()
 
         if self.shuffled == False:
-            if self.shuffle_switch.active:
+            if self.shuffle_button.clicked:
                 self.shuffled = False
             else:
                 shuffle_pos(self.grid.block_objects)
-                self.shuffled = False
+                self.shuffled = True
+        
+        if self.shuffle_button.clicked and self.shuffled:
+            self.shuffled = False
+
+
         
         for i in self.grid.block_objects:
              i.draw_block(self.grid.image_surface)
+             
 
 
         self.clock.tick(FPS)
@@ -175,13 +182,8 @@ class App:
 
 
         # Image shuffling
-        self.screen.blit(self.shuffle_switch.surface, self.shuffle_switch.surface_rect)
+        self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
         
-        # print(len(self.grid.block_objects))
-        # for i in self.grid.block_objects:
-        #     i.draw_block(self.grid.image_surface)
-        # for i in self.grid.block_objects:
-        #     print(f"pic {i.value}\told: {i.original_row},{i.original_column}\tnew: {i.row},{i.column}")
         
     def close(self):
         pygame.quit()
