@@ -8,7 +8,8 @@ class Grid:
         self.height = height
         self.rows = rows
         self.columns = columns
-        self.row_spacing, self.column_spacing = self.set_row_column_spacing()
+        self.column_spacing, self.row_spacing = self.set_row_column_spacing()
+        # self.row_spacing, self.column_spacing = self.set_row_column_spacing()
         self.block_size = self.row_spacing * self.column_spacing
         self.gridlines_surface = self.draw_gridlines()
         self.image_surface = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -27,6 +28,9 @@ class Grid:
             (self.width + 2, self.height + 2), pygame.SRCALPHA
         )
 
+        row_spacing = self.height // self.rows
+        column_spacing = self.width // self.columns
+
         start_pos_rows = 0
         start_pos_columns = 0
 
@@ -38,7 +42,7 @@ class Grid:
                 start_pos=(0, start_pos_rows),
                 end_pos=(self.width, start_pos_rows),
             )
-            start_pos_rows += self.row_spacing
+            start_pos_rows += row_spacing
 
         for _ in range(self.columns + 1):
             pygame.draw.line(
@@ -48,7 +52,7 @@ class Grid:
                 start_pos=(start_pos_columns, 0),
                 end_pos=(start_pos_columns, self.height),
             )
-            start_pos_columns += self.column_spacing
+            start_pos_columns += column_spacing
 
         return grid_surface
 
