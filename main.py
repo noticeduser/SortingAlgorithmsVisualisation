@@ -4,6 +4,7 @@ from sys import exit
 from constants import *
 from switch import Switch
 from button import Button
+from slider import Slider
 from grid import Grid
 from textbox import TextBox
 from image import ImageProcessing
@@ -29,20 +30,13 @@ class App:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        # Grid intialized
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 5, 5)
-        self.gridlines_switch = Switch(
-            "ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50)
-        )
+        # Grid Related
+        self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
-        self.grid_enable_text_rect = self.grid_enable_text.get_rect(
-            midright=(
-                self.gridlines_switch.position[0] - self.gridlines_switch.size[0],
-                self.gridlines_switch.position[1],
-            )
-        )
+        self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
+        self.grid_slider = Slider((640, 360), (150, 25), 0.5, 2, 20)
 
-        # Image Initialized
+        # Image Related
         self.img = ImageProcessing()
         self.img_empty = None
         self.img_path = TextBox(25, (BARRIER_PADDING_X + 50, 50), BLACK, self.gui_font)
@@ -93,6 +87,13 @@ class App:
             if event.type == pygame.QUIT:
                 self.img.del_images()
                 self.running = False
+
+        self.grid_slider.render(self.screen)
+        self.grid_slider.move_slider()
+        row_col_val = self.grid_slider.get_value()
+
+        # Grid Setup
+        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_col_val, row_col_val)
 
         # Gridlines Transparency
         self.gridlines_switch.get_clicked()
@@ -155,6 +156,7 @@ class App:
         
         for i in self.grid.block_objects:
              i.draw_block(self.grid.image_surface)
+        
              
         self.clock.tick(FPS)
         pygame.display.update()
