@@ -30,11 +30,11 @@ class App:
         self.running = True
 
         # Grid intialized
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 15, 15)
+        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 5, 5)
         self.gridlines_switch = Switch(
             "ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50)
         )
-        self.grid_enable_text = self.gui_font.render("GRIDLINES", True, WHITE)
+        self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(
             midright=(
                 self.gridlines_switch.position[0] - self.gridlines_switch.size[0],
@@ -79,6 +79,8 @@ class App:
         # Shuffling Image
         self.shuffled = False
         self.shuffle_button = Button(" ", GREEN, self.button_font, (50, 25), (WIDTH - 100, 100))
+        self.shuffle_text = self.gui_font.render("Shuffle", True, WHITE)
+        self.shuffle_text_rect = self.shuffle_text.get_rect(midright=(self.shuffle_button.position[0] - self.shuffle_button.size[0],self.shuffle_button.position[1],))
 
     def run(self):
         while self.running:
@@ -119,7 +121,6 @@ class App:
                         self.img.update_img(paste())
                         self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
                         for i in self.img.blocks:
-                            print(i)
                             block = Block(i[0],i[1],i[2], self.grid.row_spacing, self.grid.column_spacing, i[3])
                             block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
@@ -144,18 +145,17 @@ class App:
                 self.shuffled = False
             else:
                 shuffle_pos(self.grid.block_objects)
+                print("--- NEW SHUFFLE ---")
+                for i in self.grid.block_objects:
+                    print(f"original row: {i.original_row}\noriginal column: {i.original_column}\nnew row: {i.row}\nnew column: {i.column}\nvalue: {i.value}\n")
                 self.shuffled = True
         
         if self.shuffle_button.clicked and self.shuffled:
             self.shuffled = False
-
-
         
         for i in self.grid.block_objects:
              i.draw_block(self.grid.image_surface)
              
-
-
         self.clock.tick(FPS)
         pygame.display.update()
 
@@ -183,6 +183,7 @@ class App:
 
         # Image shuffling
         self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
+        self.screen.blit(self.shuffle_text, self.shuffle_text_rect)
         
         
     def close(self):
