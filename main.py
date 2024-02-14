@@ -31,10 +31,12 @@ class App:
         self.running = True
 
         # Grid Related
+        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 3, 3)
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((640, 360), (150, 25), 0.5, 2, 20)
+        self.grid_slider = Slider((500,1000), (150, 25), 0.5, 2, 20)
+        self.confirm_grid_button = Button("Confirm", GREEN, self.button_font, (60, 25), (WIDTH - 20, 100))
 
         # Image Related
         self.img = ImageProcessing()
@@ -71,10 +73,15 @@ class App:
         )
 
         # Shuffling Image
-        self.shuffled = False
         self.shuffle_button = Button(" ", GREEN, self.button_font, (50, 25), (WIDTH - 100, 100))
         self.shuffle_text = self.gui_font.render("Shuffle", True, WHITE)
         self.shuffle_text_rect = self.shuffle_text.get_rect(midright=(self.shuffle_button.position[0] - self.shuffle_button.size[0],self.shuffle_button.position[1],))
+
+        # Conditionals
+        self.selected_grid_size = False
+        self.added_image = False
+        self.shuffled = False
+
 
     def run(self):
         while self.running:
@@ -93,7 +100,7 @@ class App:
         row_col_val = self.grid_slider.get_value()
 
         # Grid Setup
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_col_val, row_col_val)
+        #self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_col_val, row_col_val)
 
         # Gridlines Transparency
         self.gridlines_switch.get_clicked()
@@ -164,24 +171,15 @@ class App:
     def draw(self):
         # Grid
         self.screen.fill(DARK_GRAY)
-        self.screen.blit(
-            self.grid.get_images()[0], self.grid.get_images()[1]
-        )
-        self.screen.blit(
-            self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1]
-        )
+        self.screen.blit(self.grid.get_images()[0], self.grid.get_images()[1])
+        self.screen.blit(self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1])
         self.screen.blit(self.grid_enable_text, self.grid_enable_text_rect)
-        self.screen.blit(
-            self.gridlines_switch.surface, self.gridlines_switch.surface_rect
-        )
+        self.screen.blit(self.gridlines_switch.surface, self.gridlines_switch.surface_rect)
+        self.screen.blit(self.confirm_grid_button.surface, self.confirm_grid_button.surface_rect)
 
         # Textbox
-        self.screen.blit(
-            self.img_path.get_surface_and_rect()[0],
-            self.img_path.get_surface_and_rect()[1],
-        )
+        self.screen.blit(self.img_path.get_surface_and_rect()[0],self.img_path.get_surface_and_rect()[1],)
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
-
 
         # Image shuffling
         self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
