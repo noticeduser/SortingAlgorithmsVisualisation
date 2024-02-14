@@ -31,7 +31,6 @@ class App:
         self.running = True
 
         # Grid Related
-        self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, 3, 3)
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
@@ -100,7 +99,13 @@ class App:
         row_col_val = self.grid_slider.get_value()
 
         # Grid Setup
-        #self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_col_val, row_col_val)
+        self.confirm_grid_button.get_clicked()
+
+        if not self.selected_grid_size:
+            if self.confirm_grid_button.clicked:
+                self.selected_grid_size = True
+            else:
+                self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_col_val, row_col_val)
 
         # Gridlines Transparency
         self.gridlines_switch.get_clicked()
@@ -128,6 +133,7 @@ class App:
                     if self.img.verify_extension(r"{}".format(paste())):
                         self.img.update_img(paste())
                         self.img.split_into_blocks(self.grid.rows, self.grid.columns, self.grid.row_spacing, self.grid.column_spacing)
+
                         for i in self.img.blocks:
                             block = Block(i[0],i[1],i[2], self.grid.row_spacing, self.grid.column_spacing, i[3])
                             block.draw_block(self.grid.image_surface)
@@ -136,10 +142,7 @@ class App:
                         for i in self.grid.block_objects:
                             i.draw_block(self.grid.image_surface)
 
-
                         self.img_empty = False
-                        for i in self.grid.block_objects:
-                            i.draw_block(self.grid.image_surface)
                     else:
                         self.screen.blit(self.invalid_entry, self.invalid_entry_rect)
                 except FileNotFoundError:
