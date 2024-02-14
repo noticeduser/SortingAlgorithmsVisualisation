@@ -1,8 +1,9 @@
 import pygame
 from constants import *
 
+
 class Button:
-    def __init__(self, text, color, font, size, position):
+    def __init__(self, text, colour, font, size, position):
         # Core attributes
         self.position = position
         self.size = size
@@ -16,11 +17,11 @@ class Button:
         self.text_rendered = font.render(text, True, WHITE)
         self.text_rect = self.text_rendered.get_rect(center=text_size)
 
-        # Color
-        self.color = color
+        # Colour
+        self.colour = colour
 
         # Setup
-        self.surface.fill(color)
+        self.surface.fill(colour)
         self.surface.blit(self.text_rendered, self.text_rect)
 
         # Action

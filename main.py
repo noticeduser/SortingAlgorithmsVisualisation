@@ -2,11 +2,11 @@ import pygame
 from clipboard import paste
 from sys import exit
 from constants import *
-from switch import Switch
-from button import Button
-from slider import Slider
+from ui_elements.switch import Switch
+from ui_elements.button import Button
+from ui_elements.slider import Slider
+from ui_elements.textbox import TextBox
 from grid import Grid
-from textbox import TextBox
 from image import ImageProcessing
 from block import *
 
