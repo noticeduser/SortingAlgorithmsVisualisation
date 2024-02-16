@@ -74,12 +74,10 @@ class App:
 
         # Shuffling Image
         self.index_grid_pos = None
-        self.shuffle_button = Button(" ", GREEN, self.button_font, (50, 25), (WIDTH - 100, 100))
-        self.shuffle_text = self.gui_font.render("Shuffle", True, WHITE)
-        self.shuffle_text_rect = self.shuffle_text.get_rect(midright=(self.shuffle_button.position[0] - self.shuffle_button.size[0],self.shuffle_button.position[1],))
+        self.shuffle_button = Button("SHUFFLE", GREEN, self.button_font, (100, 50), (WIDTH - 300, HEIGHT - BARRIER_PADDING_Y))
 
         # Sorting Image
-        self.sort_button = Button("Sort", GREEN, self.button_font, (50, 25), (WIDTH - 100, 150))
+        self.sort_button = Button("SORT", GREEN, self.button_font, (100, 50), (WIDTH - 100, HEIGHT - BARRIER_PADDING_Y))
 
         # Conditionals
         self.selected_grid_size = False
@@ -146,10 +144,6 @@ class App:
                             self.grid.block_objects.append(block)
 
                         self.index_grid_pos = get_index_grid_pos(self.grid.block_objects)
-
-                        for i in self.grid.block_objects:
-                            i.draw_block(self.grid.image_surface)
-
                         self.img_empty = False
                     else:
                         self.screen.blit(self.invalid_entry, self.invalid_entry_rect)
@@ -169,8 +163,6 @@ class App:
         if self.shuffle_button.clicked and self.shuffled:
             self.shuffled = False
         
-        for i in self.grid.block_objects:
-             i.draw_block(self.grid.image_surface)
         
         # Sorting Image
         self.sort_button.get_clicked()
@@ -178,10 +170,14 @@ class App:
         if not self.sorted:
             if self.sort_button.clicked:
                 bubble_sort(self.grid.block_objects)
-                print("--- sorted ---")
-                for i in self.grid.block_objects:
-                    print(f"original row: {i.original_row}\noriginal column: {i.original_column}\nnew row: {i.row}\nnew column: {i.column}\nvalue: {i.value}\n")
                 self.sorted = True
+        
+        if self.sort_button.clicked and self.sorted:
+            self.sorted = False
+
+        # Updating images on screen
+        for i in self.grid.block_objects:
+             i.draw_block(self.grid.image_surface)
         
 
 
@@ -203,7 +199,6 @@ class App:
 
         # Image shuffling
         self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
-        self.screen.blit(self.shuffle_text, self.shuffle_text_rect)
 
         # Image sorting
         self.screen.blit(self.sort_button.surface, self.sort_button.surface_rect)

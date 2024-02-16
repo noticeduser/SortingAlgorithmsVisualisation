@@ -10,7 +10,7 @@ class Button:
 
         # Surface setup
         self.surface = pygame.Surface(size)
-        self.surface_rect = self.surface.get_rect(center=position)
+        self.surface_rect = self.surface.get_rect(midbottom=position)
 
         # Text
         text_size = (size[0] // 2, size[1] // 2)

@@ -23,9 +23,7 @@ class Grid:
         return (row_spacing, column_spacing)
 
     def draw_gridlines(self):
-        grid_surface = pygame.Surface(
-            (self.width + 2, self.height + 2), pygame.SRCALPHA
-        )
+        grid_surface = pygame.Surface((self.width + 2, self.height + 2), pygame.SRCALPHA)
 
         row_spacing = self.height // self.rows
         column_spacing = self.width // self.columns
