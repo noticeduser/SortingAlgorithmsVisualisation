@@ -31,13 +31,17 @@ class Block:
         y = self.row * self.height
         screen.blit(self.img, (x, y))
 
-
-def shuffle_pos(blocks_lst):
-    index_gridpos = {}
+    
+def get_index_grid_pos(blocks_lst):
+    index_grid_pos = {}
     for i, b in enumerate(blocks_lst):
-        index_gridpos[i] = (b.original_row, b.original_column)
+        index_grid_pos[i] = (b.original_row, b.original_column)
+        
+    return index_grid_pos
 
+
+def shuffle_pos(blocks_lst, index_grid_pos):
     random.shuffle(blocks_lst)
-
     for i, b in enumerate(blocks_lst):
-        b.row, b.column = index_gridpos[i]
+        b.row, b.column = index_grid_pos[i]
+    

@@ -10,7 +10,7 @@ class Slider:
 
         self.slider_left_pos = self.pos[0] - (size[0] // 2)
         self.slider_right_pos = self.pos[0] + (size[0] // 2)
-        self.slider_top_pos = self.pos[0] - (size[1] // 2)
+        self.slider_top_pos = self.pos[1] - (size[1] // 2)
 
         self.min_val = min_val
         self.max_val = max_val

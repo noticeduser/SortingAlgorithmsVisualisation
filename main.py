@@ -9,6 +9,7 @@ from ui_elements.textbox import TextBox
 from grid import Grid
 from image import ImageProcessing
 from block import *
+from sorting_algorithms import *
 
 
 class App:
@@ -34,13 +35,13 @@ class App:
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((500,1000), (150, 25), 0.5, 2, 20)
-        self.confirm_grid_button = Button("Confirm", GREEN, self.button_font, (60, 25), (WIDTH - 20, 100))
+        self.grid_slider = Slider((175,50), (150, 25), 0, 2, 20)
+        self.confirm_grid_button = Button("OK", GREEN, self.button_font, (50, 25), (50, 50))
 
         # Image Related
         self.img = ImageProcessing()
         self.img_empty = None
-        self.img_path = TextBox(25, (BARRIER_PADDING_X + 50, 50), BLACK, self.gui_font)
+        self.img_path = TextBox(25, (BARRIER_PADDING_X + 50, HEIGHT - BARRIER_PADDING_Y + 25), BLACK, self.gui_font)
         self.textbox_switch = Switch(
             "ADD",
             "DEL",
@@ -48,7 +49,7 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (BARRIER_PADDING_X + 25, 50),
+            (BARRIER_PADDING_X + 25, HEIGHT - BARRIER_PADDING_Y + 25),
         )
 
         self.added_text = self.gui_font.render("IMAGE ADDED", True, GREEN)
@@ -72,14 +73,19 @@ class App:
         )
 
         # Shuffling Image
+        self.index_grid_pos = None
         self.shuffle_button = Button(" ", GREEN, self.button_font, (50, 25), (WIDTH - 100, 100))
         self.shuffle_text = self.gui_font.render("Shuffle", True, WHITE)
         self.shuffle_text_rect = self.shuffle_text.get_rect(midright=(self.shuffle_button.position[0] - self.shuffle_button.size[0],self.shuffle_button.position[1],))
+
+        # Sorting Image
+        self.sort_button = Button("Sort", GREEN, self.button_font, (50, 25), (WIDTH - 100, 150))
 
         # Conditionals
         self.selected_grid_size = False
         self.added_image = False
         self.shuffled = False
+        self.sorted = False
 
 
     def run(self):
@@ -139,6 +145,8 @@ class App:
                             block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
 
+                        self.index_grid_pos = get_index_grid_pos(self.grid.block_objects)
+
                         for i in self.grid.block_objects:
                             i.draw_block(self.grid.image_surface)
 
@@ -155,10 +163,7 @@ class App:
             if self.shuffle_button.clicked:
                 self.shuffled = False
             else:
-                shuffle_pos(self.grid.block_objects)
-                print("--- NEW SHUFFLE ---")
-                for i in self.grid.block_objects:
-                    print(f"original row: {i.original_row}\noriginal column: {i.original_column}\nnew row: {i.row}\nnew column: {i.column}\nvalue: {i.value}\n")
+                shuffle_pos(self.grid.block_objects, self.index_grid_pos)
                 self.shuffled = True
         
         if self.shuffle_button.clicked and self.shuffled:
@@ -167,7 +172,19 @@ class App:
         for i in self.grid.block_objects:
              i.draw_block(self.grid.image_surface)
         
-             
+        # Sorting Image
+        self.sort_button.get_clicked()
+
+        if not self.sorted:
+            if self.sort_button.clicked:
+                bubble_sort(self.grid.block_objects)
+                print("--- sorted ---")
+                for i in self.grid.block_objects:
+                    print(f"original row: {i.original_row}\noriginal column: {i.original_column}\nnew row: {i.row}\nnew column: {i.column}\nvalue: {i.value}\n")
+                self.sorted = True
+        
+
+
         self.clock.tick(FPS)
         pygame.display.update()
 
@@ -187,6 +204,9 @@ class App:
         # Image shuffling
         self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
         self.screen.blit(self.shuffle_text, self.shuffle_text_rect)
+
+        # Image sorting
+        self.screen.blit(self.sort_button.surface, self.sort_button.surface_rect)
         
         
     def close(self):
