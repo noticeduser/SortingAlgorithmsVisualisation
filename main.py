@@ -35,7 +35,7 @@ class App:
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 20)
+        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 100)
         self.confirm_grid_button = Button("OK", GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
 
         # Image Related
@@ -153,17 +153,16 @@ class App:
         if not self.sorted:
             if self.sort_button.clicked:
                 self.sorting = True
-                self.sort_generator = merge_sort(self.grid.block_objects)
+                self.sort_generator = heap_sort(self.grid.block_objects)
         
         if self.sorting:
             try:
                 next(self.sort_generator)
-                print("sorting")
             except StopIteration:
                 self.sorted = True
                 self.sorting = False
                 for i in self.grid.block_objects:
-                    print(f"value: {i.value}")
+                    print(f"\nvalue: {i.value}\nrow: {i.row}\ncolumn: {i.column}")
                 del self.sort_generator
         
         
