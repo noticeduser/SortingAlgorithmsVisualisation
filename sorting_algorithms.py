@@ -7,3 +7,4 @@ def bubble_sort(arr):
                 arr[j].row, arr[j+1].row = arr[j+1].row, arr[j].row
                 arr[j].column, arr[j+1].column = arr[j+1].column, arr[j].column
                 arr[j], arr[j+1] = arr[j+1], arr[j]
+                yield True

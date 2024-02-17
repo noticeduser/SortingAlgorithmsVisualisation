@@ -49,28 +49,20 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (BARRIER_PADDING_X + 25, HEIGHT - BARRIER_PADDING_Y + 25),
+            (BARRIER_PADDING_X + 25, HEIGHT - BARRIER_PADDING_Y + 25)
         )
 
         self.added_text = self.gui_font.render("IMAGE ADDED", True, GREEN)
-        self.added_text_rect = self.added_text.get_rect(
-            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10)
-        )
+        self.added_text_rect = self.added_text.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10))
 
         self.not_added = self.gui_font.render("IMAGE NOT ADDED", True, RED)
-        self.not_added_rect = self.not_added.get_rect(
-            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10)
-        )
+        self.not_added_rect = self.not_added.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10))
 
         self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
-        self.invalid_entry_rect = self.invalid_entry.get_rect(
-            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85)
-        )
+        self.invalid_entry_rect = self.invalid_entry.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85))
 
         self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED)
-        self.invalid_path_rect = self.invalid_path.get_rect(
-            bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85)
-        )
+        self.invalid_path_rect = self.invalid_path.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85))
 
         # Shuffling Image
         self.index_grid_pos = None
@@ -83,6 +75,7 @@ class App:
         self.selected_grid_size = False
         self.added_image = False
         self.shuffled = False
+        self.sorting = False
         self.sorted = False
 
 
@@ -153,7 +146,7 @@ class App:
         # Shuffling Image
         self.shuffle_button.get_clicked()
 
-        if self.shuffled == False:
+        if not self.shuffled:
             if self.shuffle_button.clicked:
                 self.shuffled = False
             else:
@@ -169,8 +162,15 @@ class App:
 
         if not self.sorted:
             if self.sort_button.clicked:
-                bubble_sort(self.grid.block_objects)
+                self.sorting = True
+        
+        if self.sorting:
+            try:
+                next(bubble_sort(self.grid.block_objects))
+            except StopIteration:
                 self.sorted = True
+        else:
+            self.sorted = True
         
         if self.sort_button.clicked and self.sorted:
             self.sorted = False

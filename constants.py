@@ -1,7 +1,7 @@
 # Screen Specs
 WIDTH = 1280
 HEIGHT = 720
-FPS = 75
+FPS = 60
 
 # Grid Specs
 GRID_WIDTH = 500
