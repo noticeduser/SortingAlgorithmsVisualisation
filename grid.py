@@ -56,12 +56,12 @@ class Grid:
     def get_surface_and_rect(self):
         return (
             self.gridlines_surface,
-            self.gridlines_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2)),
+            self.gridlines_surface.get_rect(midright=(WIDTH // 2, HEIGHT // 2)),
         )
     def get_images(self):
         return (
             self.image_surface, 
-            self.image_surface.get_rect(center = (WIDTH // 2, HEIGHT // 2))
+            self.image_surface.get_rect(midright=(WIDTH // 2, HEIGHT // 2))
         )
 
     # Handles the transparency of the gridlines
@@ -71,5 +71,3 @@ class Grid:
     def set_alpha_max(self):
         return self.gridlines_surface.set_alpha(255)
 
-    def get_square(self):
-        pass

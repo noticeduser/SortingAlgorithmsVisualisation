@@ -40,6 +40,53 @@ def selection_sort(arr):
         yield True
 
 
+def merge_sort(arr):
+    n = len(arr)
+
+    if n > 1:
+        left_arr = arr[:n//2]
+        right_arr = arr[n//2:]
+    
+        yield from merge_sort(left_arr)
+        yield from merge_sort(right_arr)
+
+        i = 0
+        j = 0
+        k = 0
+
+        while i < len(left_arr) and j < len(right_arr):
+            if left_arr[i].value <= right_arr[j].value:
+                arr[k] = left_arr[i]
+                i += 1
+            else:
+                arr[k] = right_arr[j]
+                j += 1
+            k += 1
+
+        while i < len(left_arr):
+            arr[k] = left_arr[i]
+            i += 1
+            k += 1
+
+        while j < len(right_arr):
+            arr[k] = right_arr[j]
+            j += 1
+            k += 1
+
+        yield True  # Yield after each step of merging
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -35,13 +35,13 @@ class App:
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((175,50), (150, 25), 0, 2, 100)
-        self.confirm_grid_button = Button("OK", GREEN, self.button_font, (50, 25), (50, 50))
+        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 20)
+        self.confirm_grid_button = Button("OK", GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
 
         # Image Related
         self.img = ImageProcessing()
         self.img_empty = None
-        self.img_path = TextBox(25, (BARRIER_PADDING_X + 50, HEIGHT - BARRIER_PADDING_Y + 25), BLACK, self.gui_font)
+        self.img_path = TextBox(25, (190, HEIGHT - BARRIER_PADDING_Y + 50), BLACK, self.gui_font)
         self.textbox_switch = Switch(
             "ADD",
             "DEL",
@@ -49,20 +49,15 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (BARRIER_PADDING_X + 25, HEIGHT - BARRIER_PADDING_Y + 25)
+            (164, HEIGHT - BARRIER_PADDING_Y + 50)
         )
 
-        self.added_text = self.gui_font.render("IMAGE ADDED", True, GREEN)
-        self.added_text_rect = self.added_text.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10))
-
-        self.not_added = self.gui_font.render("IMAGE NOT ADDED", True, RED)
-        self.not_added_rect = self.not_added.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 10))
 
         self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
-        self.invalid_entry_rect = self.invalid_entry.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85))
+        self.invalid_entry_rect = self.invalid_entry.get_rect(bottomleft=(139, BARRIER_PADDING_Y - 5))
 
         self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED)
-        self.invalid_path_rect = self.invalid_path.get_rect(bottomleft=(BARRIER_PADDING_X, BARRIER_PADDING_Y - 85))
+        self.invalid_path_rect = self.invalid_path.get_rect(bottomleft=(139, BARRIER_PADDING_Y - 5))
 
         # Shuffling Image
         self.index_grid_pos = None
@@ -115,11 +110,6 @@ class App:
         # Loading Image
         self.textbox_switch.get_clicked()
 
-        if self.img_empty:
-            self.screen.blit(self.not_added, self.not_added_rect)
-        else:
-            self.screen.blit(self.added_text, self.added_text_rect)
-
         if self.textbox_switch.active:
             self.img_path.set_text(paste())
             self.img_empty = True
@@ -163,14 +153,17 @@ class App:
         if not self.sorted:
             if self.sort_button.clicked:
                 self.sorting = True
-                self.sort_generator = selection_sort(self.grid.block_objects)
+                self.sort_generator = merge_sort(self.grid.block_objects)
         
         if self.sorting:
             try:
                 next(self.sort_generator)
+                print("sorting")
             except StopIteration:
                 self.sorted = True
                 self.sorting = False
+                for i in self.grid.block_objects:
+                    print(f"value: {i.value}")
                 del self.sort_generator
         
         
