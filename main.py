@@ -35,8 +35,8 @@ class App:
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 100)
-        self.confirm_grid_button = Button("OK", GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
+        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 20)
+        self.confirm_grid_button = Button("OK", GREEN, LIGHT_GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
 
         # Image Related
         self.img = ImageProcessing()
@@ -61,10 +61,10 @@ class App:
 
         # Shuffling Image
         self.index_grid_pos = None
-        self.shuffle_button = Button("SHUFFLE", GREEN, self.button_font, (100, 50), (WIDTH - 300, HEIGHT - BARRIER_PADDING_Y))
+        self.shuffle_button = Button("SHUFFLE", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH - 300, HEIGHT - BARRIER_PADDING_Y))
 
         # Sorting Image
-        self.sort_button = Button("SORT", GREEN, self.button_font, (100, 50), (WIDTH - 100, HEIGHT - BARRIER_PADDING_Y))
+        self.sort_button = Button("SORT", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH - 100, HEIGHT - BARRIER_PADDING_Y))
 
         # Conditionals
         self.selected_grid_size = False
@@ -153,10 +153,12 @@ class App:
         if not self.sorted:
             if self.sort_button.clicked:
                 self.sorting = True
-                self.sort_generator = heap_sort(self.grid.block_objects)
+                print(self.index_grid_pos)
+                self.sort_generator = merge_sort(self.grid.block_objects, self.index_grid_pos)
         
         if self.sorting:
             try:
+                print("sorting")
                 next(self.sort_generator)
             except StopIteration:
                 self.sorted = True
