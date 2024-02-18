@@ -2,6 +2,13 @@ import pygame
 from clipboard import paste
 from sys import exit
 from constants import *
+from algorithms.bubble_sort import bubble_sort
+from algorithms.heap_sort import *
+from algorithms.insertion_sort import insertion_sort
+from algorithms.merge_sort import *
+from algorithms.quick_sort import *
+from algorithms.selection_sort import selection_sort
+from algorithms.shell_sort import shell_sort
 from ui_elements.switch import Switch
 from ui_elements.button import Button
 from ui_elements.slider import Slider
@@ -9,7 +16,7 @@ from ui_elements.textbox import TextBox
 from grid import Grid
 from image import ImageProcessing
 from block import *
-from sorting_algorithms import *
+
 
 
 class App:
@@ -35,7 +42,7 @@ class App:
         self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 20)
+        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 40)
         self.confirm_grid_button = Button("OK", GREEN, LIGHT_GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
 
         # Image Related
@@ -154,7 +161,7 @@ class App:
             if self.sort_button.clicked:
                 self.sorting = True
                 print(self.index_grid_pos)
-                self.sort_generator = merge_sort(self.grid.block_objects, self.index_grid_pos)
+                self.sort_generator = shell_sort(self.grid.block_objects)
         
         if self.sorting:
             try:
