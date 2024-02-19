@@ -39,25 +39,17 @@ class App:
         self.running = True
 
         # Grid Related
-        self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH - 100, 50))
+        self.gridlines_switch = Switch("ON", "OFF", GREEN, RED, self.button_font, (50, 25), (WIDTH_MIDPOINT + 525, 50))
         self.grid_enable_text = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_enable_text_rect = self.grid_enable_text.get_rect(midright=(self.gridlines_switch.position[0] - self.gridlines_switch.size[0], self.gridlines_switch.position[1],))
-        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 40)
+        self.grid_slider = Slider((284, BARRIER_PADDING_Y - 54), (150, 25), 0.5, 2, 20)
         self.confirm_grid_button = Button("OK", GREEN, LIGHT_GREEN, self.button_font, (50, 25), (164, BARRIER_PADDING_Y - 40))
 
         # Image Related
         self.img = ImageProcessing()
         self.img_empty = None
         self.img_path = TextBox(25, (190, HEIGHT - BARRIER_PADDING_Y + 50), BLACK, self.gui_font)
-        self.textbox_switch = Switch(
-            "ADD",
-            "DEL",
-            GREEN,
-            RED,
-            self.button_font,
-            (50, 25),
-            (164, HEIGHT - BARRIER_PADDING_Y + 50)
-        )
+        self.textbox_switch = Switch("ADD", "DEL", GREEN, RED, self.button_font, (50, 25), (164, HEIGHT - BARRIER_PADDING_Y + 50))
 
 
         self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
@@ -66,12 +58,25 @@ class App:
         self.invalid_path = self.gui_font.render("DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED)
         self.invalid_path_rect = self.invalid_path.get_rect(bottomleft=(139, BARRIER_PADDING_Y - 5))
 
-        # Shuffling Image
-        self.index_grid_pos = None
-        self.shuffle_button = Button("SHUFFLE", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH - 300, HEIGHT - BARRIER_PADDING_Y))
 
-        # Sorting Image
-        self.sort_button = Button("SORT", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH - 100, HEIGHT - BARRIER_PADDING_Y))
+        # Shuffling and Sorting Image
+        self.box_surface = pygame.Surface((400, 250))
+        self.box_surface_rect = self.box_surface.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT ))
+        self.box_surface.fill(BLACK)
+
+        self.index_grid_pos = None
+        self.shuffle_button = Button("SHUFFLE", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT + 75))
+        self.sort_button = Button("SORT", GREEN, LIGHT_GREEN, self.button_font, (100, 50), (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT + 75))
+
+        self.heap_button = Button("Heap", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT ))
+        self.selection_button = Button("Selection", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT - 75 ))
+        self.quick_button = Button("Quick", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 75 ))
+
+        self.merge_button = Button("Merge", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT ))
+        self.insertion_button = Button("Insertion", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT -75))
+        self.shell_button = Button("Shell", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT ))
+        self.bubble_button = Button("Bubble", DARK_BLUE, LIGHT_BLUE, self.button_font, (100, 50), (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT - 75))
+
 
         # Conditionals
         self.selected_grid_size = False
@@ -200,11 +205,19 @@ class App:
         self.screen.blit(self.img_path.get_surface_and_rect()[0],self.img_path.get_surface_and_rect()[1],)
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
 
-        # Image shuffling
+        # Image shuffling and sorting
+        self.screen.blit(self.box_surface, self.box_surface_rect)
+        pygame.draw.rect(self.screen, WHITE, self.box_surface_rect, 5)
         self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
-
-        # Image sorting
         self.screen.blit(self.sort_button.surface, self.sort_button.surface_rect)
+        self.screen.blit(self.heap_button.surface, self.heap_button.surface_rect)
+        self.screen.blit(self.selection_button.surface, self.selection_button.surface_rect)
+        self.screen.blit(self.quick_button.surface, self.quick_button.surface_rect)
+        self.screen.blit(self.merge_button.surface, self.merge_button.surface_rect)
+        self.screen.blit(self.shell_button.surface, self.shell_button.surface_rect)
+        self.screen.blit(self.bubble_button.surface, self.bubble_button.surface_rect)
+        self.screen.blit(self.insertion_button.surface, self.insertion_button.surface_rect)
+
         
         
     def close(self):
