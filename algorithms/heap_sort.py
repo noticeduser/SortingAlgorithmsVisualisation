@@ -4,9 +4,11 @@ def swap(arr, i, j):
     arr[i].column, arr[j].column = arr[j].column, arr[i].column
 
 
-def siftDown(arr, i, upper):
+def sift_down(arr, i, upper):
     while True:
-        left, right = i * 2 + 1, i * 2 + 2
+        left = i * 2 + 1
+        right = i * 2 + 2
+        
         if max(left, right) < upper:
             if arr[i].value >= max(arr[left].value, arr[right].value):
                 break
@@ -35,10 +37,10 @@ def siftDown(arr, i, upper):
 def heap_sort(arr):
     n = len(arr)
     for j in range((n - 2) // 2, -1, -1):
-        siftDown(arr, j, n)
+        sift_down(arr, j, n)
         yield True
 
     for end in range(n - 1, 0, -1):
         swap(arr, 0, end)
-        siftDown(arr, 0, end)
+        sift_down(arr, 0, end)
         yield arr[end]
