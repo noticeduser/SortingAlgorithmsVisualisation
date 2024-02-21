@@ -1,8 +1,18 @@
 import pygame
 from constants import *
 
+
 class Switch:
-    def __init__(self, primary_text, secondary_text, primary_colour, secondary_colour, font, size, position):
+    def __init__(
+        self,
+        primary_text,
+        secondary_text,
+        primary_colour,
+        secondary_colour,
+        font,
+        size,
+        position,
+    ):
         # Core attributes
         self.position = position
         self.size = size
@@ -29,7 +39,6 @@ class Switch:
         # Boolean Values
         self.active = True
         self.pressed = False
-        
 
     def get_clicked(self):
         mouse_pos = pygame.mouse.get_pos()

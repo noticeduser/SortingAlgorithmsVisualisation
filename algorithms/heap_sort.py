@@ -8,7 +8,7 @@ def sift_down(arr, i, upper):
     while True:
         left = i * 2 + 1
         right = i * 2 + 2
-        
+
         if max(left, right) < upper:
             if arr[i].value >= max(arr[left].value, arr[right].value):
                 break

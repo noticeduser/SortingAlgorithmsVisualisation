@@ -14,7 +14,6 @@ class Grid:
         self.image_surface = pygame.Surface((width, height), pygame.SRCALPHA)
         self.block_objects = []
 
-        print(self.block_size)
 
     def set_row_column_spacing(self):
         row_spacing = self.height // self.rows
@@ -56,12 +55,13 @@ class Grid:
     def get_surface_and_rect(self):
         return (
             self.gridlines_surface,
-            self.gridlines_surface.get_rect(midright=(WIDTH // 2, HEIGHT // 2)),
+            self.gridlines_surface.get_rect(midright=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
         )
+
     def get_images(self):
         return (
-            self.image_surface, 
-            self.image_surface.get_rect(midright=(WIDTH // 2, HEIGHT // 2))
+            self.image_surface,
+            self.image_surface.get_rect(midright=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
         )
 
     # Handles the transparency of the gridlines
@@ -70,4 +70,3 @@ class Grid:
 
     def set_alpha_max(self):
         return self.gridlines_surface.set_alpha(255)
-

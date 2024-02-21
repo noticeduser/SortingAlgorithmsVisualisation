@@ -9,7 +9,7 @@ def shell_sort(arr):
             while j >= gap and arr[j - gap].value > temp.value:
                 arr[j] = arr[j - gap]
                 arr[j - gap] = temp
-    
+
                 arr[j].row, arr[j - gap].row = arr[j - gap].row, arr[j].row
                 arr[j].column, arr[j - gap].column = arr[j - gap].column, arr[j].column
                 j -= gap

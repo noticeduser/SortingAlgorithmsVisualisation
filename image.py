@@ -34,7 +34,6 @@ class ImageProcessing:
                 block_img.save(block_path)
                 self.blocks.append((block_path, row, col, value))
                 value += 1
-    
 
     def crop_image(self):
         self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
@@ -58,18 +57,18 @@ class ImageProcessing:
         if path[0] == '"':
             path = path.replace('"', "")
         return path
-    
+
     def get_time(self):
         current_datetime = datetime.datetime.now()
         formatted_datetime = current_datetime.strftime("%Y%m%d_%H%M%S")
         return formatted_datetime
-    
+
     def del_images(self):
         folders = os.listdir("images/user_images/")
         for folder in folders:
-            folder_path =  os.path.join("images/user_images/", folder)
+            folder_path = os.path.join("images/user_images/", folder)
             shutil.rmtree(folder_path)
-    
+
     # Image Loading and Updating Methods
     def update_img(self, path):
         path = self.check_quotations(path)
