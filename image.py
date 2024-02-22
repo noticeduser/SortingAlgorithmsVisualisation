@@ -32,7 +32,6 @@ class ImageProcessing:
 
                 block_img = self.img.crop((left, upper, right, lower))
                 block_path = f"{self.return_path}/block_{row}_{col}.png"
-                print(block_path)
                 block_img.save(block_path)
                 self.blocks.append((block_path, row, col, value))
                 value += 1

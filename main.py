@@ -4,10 +4,10 @@ import pygame
 from clipboard import paste
 
 from algorithms.bubble_sort import bubble_sort
-from algorithms.heap_sort import *
+from algorithms.heap_sort import heap_sort
 from algorithms.insertion_sort import insertion_sort
-from algorithms.merge_sort import *
-from algorithms.quick_sort import *
+from algorithms.merge_sort import merge_sort
+from algorithms.quick_sort import quick_sort
 from algorithms.selection_sort import selection_sort
 from algorithms.shell_sort import shell_sort
 from block import *
@@ -55,7 +55,7 @@ class App:
             (50, 25),
             (WIDTH_MIDPOINT + 225, BARRIER_PADDING_Y + 75),
         )
-        self.grid_slider = Slider((915, BARRIER_PADDING_Y + 25), (150, 25), 0.2, 2, 20)
+        self.grid_slider = Slider((915, BARRIER_PADDING_Y + 25), (150, 25), 0.5, 2, 30)
 
         self.grid_enable_txt = self.gui_font.render("Gridlines", True, WHITE)
         self.grid_size_txt = self.gui_font.render("Grid Size", True, WHITE)
@@ -310,9 +310,6 @@ class App:
         # Updates Images on screen
         for i in self.grid.block_objects:
             i.draw_block(self.grid.image_surface)
-            
-        
-        print(f"\nimg added: {self.img_added}\nsorted: {self.sorted}\nsorting: {self.sorting}")
 
         self.clock.tick(FPS)
         pygame.display.update()

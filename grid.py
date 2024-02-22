@@ -1,3 +1,5 @@
+from math import floor
+
 import pygame
 
 from constants import *
@@ -17,16 +19,16 @@ class Grid:
 
 
     def set_row_column_spacing(self):
-        row_spacing = self.height // self.rows
-        column_spacing = self.width // self.columns
+        row_spacing = self.height / self.rows
+        column_spacing = self.width / self.columns
 
         return (row_spacing, column_spacing)
 
     def draw_gridlines(self):
         grid_surface = pygame.Surface((self.width + 2, self.height + 2), pygame.SRCALPHA)
 
-        row_spacing = self.height // self.rows
-        column_spacing = self.width // self.columns
+        row_spacing = self.height / self.rows
+        column_spacing = self.width / self.columns
 
         start_pos_rows = 0
         start_pos_columns = 0
