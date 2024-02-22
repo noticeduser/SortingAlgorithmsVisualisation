@@ -1,7 +1,8 @@
+from sys import exit
+
 import pygame
 from clipboard import paste
-from sys import exit
-from constants import *
+
 from algorithms.bubble_sort import bubble_sort
 from algorithms.heap_sort import *
 from algorithms.insertion_sort import insertion_sort
@@ -9,13 +10,14 @@ from algorithms.merge_sort import *
 from algorithms.quick_sort import *
 from algorithms.selection_sort import selection_sort
 from algorithms.shell_sort import shell_sort
-from ui_elements.switch import Switch
-from ui_elements.button import Button
-from ui_elements.slider import Slider
-from ui_elements.textbox import TextBox
+from block import *
+from constants import *
 from grid import Grid
 from image import ImageProcessing
-from block import *
+from ui_elements.button import Button
+from ui_elements.slider import Slider
+from ui_elements.switch import Switch
+from ui_elements.textbox import TextBox
 
 
 class App:
@@ -73,13 +75,13 @@ class App:
             (164, HEIGHT - BARRIER_PADDING_Y + 50),
         )
 
-        self.invalid_entry = self.gui_font.render("Invalid File Format", True, RED)
+        self.invalid_entry = self.gui_font.render("Invalid Entry!", True, RED)
         self.invalid_entry_rect = self.invalid_entry.get_rect(
             bottomleft=(139, BARRIER_PADDING_Y - 5)
         )
 
         self.invalid_path = self.gui_font.render(
-            "DIRECTORY DOES NOT EXIST! | click 'DEL' and try again ", True, RED
+            "DIRECTORY DOES NOT EXIST!", True, RED
         )
         self.invalid_path_rect = self.invalid_path.get_rect(
             bottomleft=(139, BARRIER_PADDING_Y - 5)
@@ -236,14 +238,7 @@ class App:
                             self.grid.column_spacing,
                         )
                         for i in self.img.blocks:
-                            block = Block(
-                                i[0],
-                                i[1],
-                                i[2],
-                                self.grid.row_spacing,
-                                self.grid.column_spacing,
-                                i[3],
-                            )
+                            block = Block(i[0], i[1], i[2], self.grid.row_spacing, self.grid.column_spacing, i[3],)
                             block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
                             
@@ -256,9 +251,9 @@ class App:
 
         # Choosing Algorithm
         for button in self.algo_buttons_arr:
-            if not self.sorting:
+            if self.img_added:
                 button.get_clicked()
-            if button.clicked:
+            if button.clicked and not self.sorting:
                 if button == self.bubble_button:
                     self.sort_generator = bubble_sort(self.grid.block_objects)
                     self.chosen_algo = "Bubble Sort"
@@ -285,23 +280,17 @@ class App:
                 self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
 
         # Shuffling Image
-        if not self.sorting and self.img_added:
+        if self.img_added:
             self.shuffle_button.get_clicked()
 
-        if self.shuffle_button.clicked and not self.shuffle_triggered:
+        if self.shuffle_button.clicked and not self.sorting:
             shuffle_pos(self.grid.block_objects, self.index_grid_pos)
             self.sorted = False
-            self.shuffle_triggered = True
-
-        self.shuffle_button.clicked = False
-        self.shuffle_triggered = False
-        
-        if self.sorted:
-            self.shuffle_triggered = False
+            self.shuffle_button.clicked = False
         
 
         # Sorting Image
-        if not self.sorting and not self.sorted and self.img_added:
+        if self.img_added:
             self.sort_button.get_clicked()
         
         if not self.sorted and self.sort_button.clicked and self.sort_generator:

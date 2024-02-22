@@ -1,7 +1,9 @@
-from PIL import Image
+import datetime
 import os
 import shutil
-import datetime
+
+from PIL import Image
+
 from constants import *
 
 
@@ -46,8 +48,9 @@ class ImageProcessing:
         return formatted_path
 
     def verify_extension(self, path):
+        if len(path) == 0:
+            return False
         path = self.check_quotations(path)
-
         extension = os.path.splitext(path)[1]
         if extension not in [".jpg", ".jpeg", ".png"]:
             return False
