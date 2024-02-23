@@ -19,8 +19,8 @@ class Grid:
 
 
     def set_row_column_spacing(self):
-        row_spacing = self.height / self.rows
-        column_spacing = self.width / self.columns
+        row_spacing = round(self.height / self.rows)
+        column_spacing = round(self.width / self.columns)
 
         return (row_spacing, column_spacing)
 
@@ -29,6 +29,7 @@ class Grid:
 
         row_spacing = self.height / self.rows
         column_spacing = self.width / self.columns
+        print(f"block size: {row_spacing * column_spacing}")
 
         start_pos_rows = 0
         start_pos_columns = 0
@@ -58,13 +59,13 @@ class Grid:
     def get_surface_and_rect(self):
         return (
             self.gridlines_surface,
-            self.gridlines_surface.get_rect(midright=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
+            self.gridlines_surface.get_rect(center=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
         )
 
     def get_images(self):
         return (
             self.image_surface,
-            self.image_surface.get_rect(midright=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
+            self.image_surface.get_rect(center=(WIDTH_MIDPOINT, HEIGHT_MIDPOINT)),
         )
 
     # Handles the transparency of the gridlines

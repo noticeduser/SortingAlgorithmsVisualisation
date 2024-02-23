@@ -3,11 +3,13 @@ from sys import exit
 import pygame
 from clipboard import paste
 
+from algorithms.bogo_sort import bogo_sort
 from algorithms.bubble_sort import bubble_sort
 from algorithms.heap_sort import heap_sort
 from algorithms.insertion_sort import insertion_sort
 from algorithms.merge_sort import merge_sort
 from algorithms.quick_sort import quick_sort
+from algorithms.radix_sort import radix_sort
 from algorithms.selection_sort import selection_sort
 from algorithms.shell_sort import shell_sort
 from block import *
@@ -111,7 +113,24 @@ class App:
             (100, 50),
             (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT + 75),
         )
-
+        self.stop_button = Button(
+            "STOP",
+            RED,
+            LIGHT_RED,
+            self.button_font,
+            (100, 50),
+            (80, 80)
+        )
+        
+        self.bogo_button = Button(
+            "Bogo",
+            DARK_BLUE,
+            LIGHT_BLUE,
+            self.button_font,
+            (100, 50),
+            (150, 150),
+        )
+        
         self.bubble_button = Button(
             "Bubble",
             DARK_BLUE,
@@ -168,8 +187,18 @@ class App:
             (100, 50),
             (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 75),
         )
-
+        
+        self.radix_button = Button(
+            "Radix",
+            DARK_BLUE,
+            LIGHT_BLUE,
+            self.button_font,
+            (100, 50),
+            (150, 200),
+        )
+        
         self.algo_buttons_arr = [
+            self.bogo_button,
             self.bubble_button,
             self.selection_button,
             self.insertion_button,
@@ -177,12 +206,22 @@ class App:
             self.heap_button,
             self.merge_button,
             self.quick_button,
+            self.radix_button,
+        ]
+        
+        self.control_buttons_arr = [
+            self.shuffle_button,
+            self.sort_button,
+            self.stop_button
         ]
         self.chosen_algo = None
+        self.time_complexity = None
         self.sort_generator = None
         self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
         self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
-
+        self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
+        self.time_complexity_txt_rext = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 200))
+        
         # Conditionals
         self.img_added = False
         self.selected_grid_size = False
@@ -239,7 +278,6 @@ class App:
                         )
                         for i in self.img.blocks:
                             block = Block(i[0], i[1], i[2], self.grid.row_spacing, self.grid.column_spacing, i[3],)
-                            block.draw_block(self.grid.image_surface)
                             self.grid.block_objects.append(block)
                             
                         self.index_grid_pos = get_index_grid_pos(self.grid.block_objects)
@@ -250,66 +288,60 @@ class App:
                     self.screen.blit(self.invalid_path, self.invalid_path_rect)
 
         # Choosing Algorithm
+        sort_dict = {
+            self.bubble_button: (bubble_sort(self.grid.block_objects), "Bubble Sort", "O(n^2)"),
+            self.bogo_button: (bogo_sort(self.grid.block_objects, self.index_grid_pos), "Bogo Sort", "O((n+1)!)"),
+            self.selection_button: (selection_sort(self.grid.block_objects), "Selection Sort", "O(n^2)"),
+            self.insertion_button: (insertion_sort(self.grid.block_objects), "Insertion Sort", "O(n^2)"),
+            self.shell_button: (shell_sort(self.grid.block_objects), "Shell Sort", "O(n^1.5)"),
+            self.heap_button: (heap_sort(self.grid.block_objects), "Heap Sort", "O(n log n)"),
+            self.merge_button: (merge_sort(self.grid.block_objects, self.index_grid_pos), "Merge Sort", "O(n log n)"),
+            self.quick_button: (quick_sort(self.grid.block_objects), "Quick Sort", "O(n log n)"),
+            self.radix_button: (radix_sort(self.grid.block_objects, self.index_grid_pos), "Radix Sort", "O(n)"),
+            }
+        
         for button in self.algo_buttons_arr:
             if self.img_added:
                 button.get_clicked()
+            
             if button.clicked and not self.sorting:
-                if button == self.bubble_button:
-                    self.sort_generator = bubble_sort(self.grid.block_objects)
-                    self.chosen_algo = "Bubble Sort"
-                elif button == self.selection_button:
-                    self.sort_generator = selection_sort(self.grid.block_objects)
-                    self.chosen_algo = "Selection Sort"
-                elif button == self.insertion_button:
-                    self.sort_generator = insertion_sort(self.grid.block_objects)
-                    self.chosen_algo = "Insertion Sort"
-                elif button == self.shell_button:
-                    self.sort_generator = shell_sort(self.grid.block_objects)
-                    self.chosen_algo = "Shell Sort"
-                elif button == self.heap_button:
-                    self.sort_generator = heap_sort(self.grid.block_objects)
-                    self.chosen_algo = "Heap Sort"
-                elif button == self.merge_button:
-                    self.sort_generator = merge_sort(self.grid.block_objects, self.index_grid_pos)
-                    self.chosen_algo = "Merge Sort"
-                elif button == self.quick_button:
-                    self.sort_generator = quick_sort(self.grid.block_objects)
-                    self.chosen_algo = "Quick Sort"
-
+                self.sort_generator, self.chosen_algo, self.time_complexity = sort_dict[button]
+            
                 self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
                 self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
+                self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
+                self.time_complexity_txt_rext = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 200))
 
-        # Shuffling Image
-        if self.img_added:
-            self.shuffle_button.get_clicked()
-
-        if self.shuffle_button.clicked and not self.sorting:
-            shuffle_pos(self.grid.block_objects, self.index_grid_pos)
-            self.sorted = False
-            self.shuffle_button.clicked = False
-        
-
-        # Sorting Image
-        if self.img_added:
-            self.sort_button.get_clicked()
-        
-        if not self.sorted and self.sort_button.clicked and self.sort_generator:
-                self.sorting = True
-
-        if self.sorting:
-            try:
-                next(self.sort_generator)
-            except StopIteration:
-                self.sorted = True
-                self.sorting = False
-                self.chosen_algo = None
-                self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-                self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
+        for button in self.control_buttons_arr:
+            if self.img_added:
+                button.get_clicked()
                 
+            # Shuffling
+            if self.shuffle_button.clicked and not self.sorting:
+                shuffle_pos(self.grid.block_objects, self.index_grid_pos)
+                self.sorted = False
+                self.shuffle_button.clicked = False
+        
+            # Sorting
+            if not self.sorted and self.sort_button.clicked and self.sort_generator:
+                    self.sorting = True
+            if self.sorting:
+                try:
+                    next(self.sort_generator)
+                except StopIteration:
+                    self.sorted = True
+                    self.sorting = False
+                    self.chosen_algo = None
+                    self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
+                    self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
+        
+            # Stopping
+            if self.stop_button.clicked:
+                self.sorting = False
 
         # Updates Images on screen
-        for i in self.grid.block_objects:
-            i.draw_block(self.grid.image_surface)
+        for block in self.grid.block_objects:
+            block.draw_block(self.grid.image_surface)
 
         self.clock.tick(FPS)
         pygame.display.update()
@@ -329,19 +361,19 @@ class App:
         self.screen.blit(self.img_path.get_surface_and_rect()[0], self.img_path.get_surface_and_rect()[1],)
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
 
-        # Image shuffling and sorting
+        # Image shuffling, sorting, stopping and algorithms
         self.screen.blit(self.box_surface, self.box_surface_rect)
         self.screen.blit(self.chosen_algo_txt, self.chosen_algo_txt_rect)
+        self.screen.blit(self.time_complexity_txt, self.time_complexity_txt_rext)
         pygame.draw.rect(self.screen, WHITE, self.box_surface_rect, 5)
-        self.screen.blit(self.shuffle_button.surface, self.shuffle_button.surface_rect)
-        self.screen.blit(self.sort_button.surface, self.sort_button.surface_rect)
-        self.screen.blit(self.heap_button.surface, self.heap_button.surface_rect)
-        self.screen.blit(self.selection_button.surface, self.selection_button.surface_rect)
-        self.screen.blit(self.quick_button.surface, self.quick_button.surface_rect)
-        self.screen.blit(self.merge_button.surface, self.merge_button.surface_rect)
-        self.screen.blit(self.shell_button.surface, self.shell_button.surface_rect)
-        self.screen.blit(self.bubble_button.surface, self.bubble_button.surface_rect)
-        self.screen.blit(self.insertion_button.surface, self.insertion_button.surface_rect)
+        
+        for button in self.algo_buttons_arr:
+            self.screen.blit(button.surface, button.surface_rect)
+        
+        for button in self.control_buttons_arr:
+            self.screen.blit(button.surface, button.surface_rect)
+        
+
 
     def close(self):
         pygame.quit()

@@ -25,8 +25,8 @@ class Block:
         self.img = pygame.image.load(img_path)
 
     def draw_block(self, screen):
-        x = round(self.column * self.width)
-        y = round(self.row * self.height)
+        x = self.column * self.width
+        y = self.row * self.height
         screen.blit(self.img, (x, y))
 
 
