@@ -42,10 +42,10 @@ class App:
         self.running = True
 
         # Grid Related
-        self.options_screen = pygame.Surface((400, 125))
+        self.options_screen = pygame.Surface((325, 75))
         self.options_screen.fill(BLACK)
         self.options_screen_rect = self.options_screen.get_rect(
-            center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT - 200)
+            center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 200))
         )
 
         self.gridlines_switch = Switch(
@@ -55,17 +55,16 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (WIDTH_MIDPOINT + 225, BARRIER_PADDING_Y + 75),
+            (BARRIER_PADDING_X_LEFT / 2, 50),
         )
-        self.grid_slider = Slider((915, BARRIER_PADDING_Y + 25), (150, 25), 0.5, 2, 30)
+        self.grid_slider = Slider((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 212.5), (300, 25), 0.5, 2, 30)
 
         self.grid_enable_txt = self.gui_font.render("Gridlines", True, WHITE)
-        self.grid_size_txt = self.gui_font.render("Grid Size", True, WHITE)
 
         # Image Related
         self.img = ImageProcessing()
         self.img_path = TextBox(
-            25, (190, HEIGHT - BARRIER_PADDING_Y + 50), BLACK, self.gui_font
+            25, (50, 17.5), BLACK, self.gui_font
         )
         self.textbox_switch = Switch(
             "ADD",
@@ -74,27 +73,28 @@ class App:
             RED,
             self.button_font,
             (50, 25),
-            (164, HEIGHT - BARRIER_PADDING_Y + 50),
+            (25, 17.5),
         )
 
         self.invalid_entry = self.gui_font.render("Invalid Entry!", True, RED)
         self.invalid_entry_rect = self.invalid_entry.get_rect(
-            bottomleft=(139, BARRIER_PADDING_Y - 5)
+            bottomleft=(139, BARRIER_PADDING_Y_BOT - 5)
         )
 
         self.invalid_path = self.gui_font.render(
             "DIRECTORY DOES NOT EXIST!", True, RED
         )
         self.invalid_path_rect = self.invalid_path.get_rect(
-            bottomleft=(139, BARRIER_PADDING_Y - 5)
+            bottomleft=(139, BARRIER_PADDING_Y_BOT - 5)
         )
 
         # Shuffling and Sorting Image
-        self.box_surface = pygame.Surface((400, 250))
-        self.box_surface_rect = self.box_surface.get_rect(
-            center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT)
-        )
-        self.box_surface.fill(BLACK)
+        self.algo_box_surface = pygame.Surface((325, 175))
+        self.algo_box_surface_rect = self.algo_box_surface.get_rect(center=(BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT))
+        self.control_box_surface = pygame.Surface((325, 75))
+        self.control_box_surface_rext = self.control_box_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200)))
+        self.algo_box_surface.fill(BLACK)
+        self.control_box_surface.fill(BLACK)
 
         self.index_grid_pos = None
         self.shuffle_button = Button(
@@ -103,7 +103,7 @@ class App:
             LIGHT_GREEN,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT + 75),
+            ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT_MIDPOINT + 200),
         )
         self.sort_button = Button(
             "SORT",
@@ -111,7 +111,7 @@ class App:
             LIGHT_GREEN,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT + 75),
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200),
         )
         self.stop_button = Button(
             "STOP",
@@ -119,7 +119,7 @@ class App:
             LIGHT_RED,
             self.button_font,
             (100, 50),
-            (80, 80)
+            ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT + 200)
         )
         
         self.bogo_button = Button(
@@ -128,7 +128,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (150, 150),
+            ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT_MIDPOINT - 50),
         )
         
         self.bubble_button = Button(
@@ -137,7 +137,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT - 75),
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 50),
         )
         self.selection_button = Button(
             "Selection",
@@ -145,7 +145,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT - 75),
+            ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT - 50),
         )
         self.insertion_button = Button(
             "Insertion",
@@ -153,7 +153,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT - 75),
+            ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT_MIDPOINT),
         )
         self.shell_button = Button(
             "Shell",
@@ -161,7 +161,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 250, HEIGHT_MIDPOINT),
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT),
         )
         self.heap_button = Button(
             "Heap",
@@ -169,7 +169,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT),
+            ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT),
         )
         self.merge_button = Button(
             "Merge",
@@ -177,7 +177,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 500, HEIGHT_MIDPOINT),
+            ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT_MIDPOINT + 50),
         )
         self.quick_button = Button(
             "Quick",
@@ -185,7 +185,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 75),
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 50),
         )
         
         self.radix_button = Button(
@@ -194,7 +194,7 @@ class App:
             LIGHT_BLUE,
             self.button_font,
             (100, 50),
-            (150, 200),
+            ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT + 50),
         )
         
         self.algo_buttons_arr = [
@@ -354,7 +354,6 @@ class App:
         self.screen.blit(self.options_screen, self.options_screen_rect)
         self.screen.blit(self.gridlines_switch.surface, self.gridlines_switch.surface_rect)
         pygame.draw.rect(self.screen, WHITE, self.options_screen_rect, 5)
-        self.options_screen.blit(self.grid_size_txt, (285, 26))
         self.options_screen.blit(self.grid_enable_txt, (285, 75))
 
         # Textbox
@@ -362,10 +361,12 @@ class App:
         self.screen.blit(self.textbox_switch.surface, self.textbox_switch.surface_rect)
 
         # Image shuffling, sorting, stopping and algorithms
-        self.screen.blit(self.box_surface, self.box_surface_rect)
+        self.screen.blit(self.algo_box_surface, self.algo_box_surface_rect)
+        self.screen.blit(self.control_box_surface, self.control_box_surface_rext)
         self.screen.blit(self.chosen_algo_txt, self.chosen_algo_txt_rect)
         self.screen.blit(self.time_complexity_txt, self.time_complexity_txt_rext)
-        pygame.draw.rect(self.screen, WHITE, self.box_surface_rect, 5)
+        pygame.draw.rect(self.screen, WHITE, self.algo_box_surface_rect, 5)
+        pygame.draw.rect(self.screen, WHITE, self.control_box_surface_rext, 5)
         
         for button in self.algo_buttons_arr:
             self.screen.blit(button.surface, button.surface_rect)
