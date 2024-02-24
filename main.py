@@ -54,12 +54,13 @@ class App:
             GREEN,
             RED,
             self.button_font,
-            (50, 25),
-            (BARRIER_PADDING_X_LEFT / 2, 50),
+            (300, 25),
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 188),
         )
         self.grid_slider = Slider((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 212.5), (300, 25), 0.5, 2, 30)
 
         self.grid_enable_txt = self.gui_font.render("Gridlines", True, WHITE)
+        self.grid_enable_txt_rect = self.grid_enable_txt.get_rect(midbottom=(BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 250))
 
         # Image Related
         self.img = ImageProcessing()
@@ -76,16 +77,16 @@ class App:
             (25, 17.5),
         )
 
-        self.invalid_entry = self.gui_font.render("Invalid Entry!", True, RED)
+        self.invalid_entry = self.gui_font.render("INVALID ENTRY!", True, RED)
         self.invalid_entry_rect = self.invalid_entry.get_rect(
-            bottomleft=(139, BARRIER_PADDING_Y_BOT - 5)
+            center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2)
         )
 
         self.invalid_path = self.gui_font.render(
             "DIRECTORY DOES NOT EXIST!", True, RED
         )
         self.invalid_path_rect = self.invalid_path.get_rect(
-            bottomleft=(139, BARRIER_PADDING_Y_BOT - 5)
+            center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2)
         )
 
         # Shuffling and Sorting Image
@@ -218,9 +219,9 @@ class App:
         self.time_complexity = None
         self.sort_generator = None
         self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-        self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
+        self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT - 212.5)))
         self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
-        self.time_complexity_txt_rext = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 200))
+        self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH - 275, HEIGHT_MIDPOINT - 188))
         
         # Conditionals
         self.img_added = False
@@ -248,6 +249,7 @@ class App:
             self.grid_slider.move_slider()
             row_and_col_val = self.grid_slider.get_value()
             self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, row_and_col_val, row_and_col_val)
+        
 
         # Gridlines Transparency
         self.gridlines_switch.get_clicked()
@@ -307,10 +309,10 @@ class App:
             if button.clicked and not self.sorting:
                 self.sort_generator, self.chosen_algo, self.time_complexity = sort_dict[button]
             
-                self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-                self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
-                self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
-                self.time_complexity_txt_rext = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 200))
+            self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
+            self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT - 212.5)))
+            self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
+            self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH - 275, HEIGHT_MIDPOINT - 188))
 
         for button in self.control_buttons_arr:
             if self.img_added:
@@ -331,9 +333,8 @@ class App:
                 except StopIteration:
                     self.sorted = True
                     self.sorting = False
-                    self.chosen_algo = None
-                    self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-                    self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(center=(WIDTH_MIDPOINT + 375, HEIGHT_MIDPOINT + 150))
+                    # self.chosen_algo = None
+                    # self.time_complexity = None
         
             # Stopping
             if self.stop_button.clicked:
@@ -353,8 +354,8 @@ class App:
         self.screen.blit(self.grid.get_surface_and_rect()[0], self.grid.get_surface_and_rect()[1])
         self.screen.blit(self.options_screen, self.options_screen_rect)
         self.screen.blit(self.gridlines_switch.surface, self.gridlines_switch.surface_rect)
+        self.screen.blit(self.grid_enable_txt, self.grid_enable_txt_rect)
         pygame.draw.rect(self.screen, WHITE, self.options_screen_rect, 5)
-        self.options_screen.blit(self.grid_enable_txt, (285, 75))
 
         # Textbox
         self.screen.blit(self.img_path.get_surface_and_rect()[0], self.img_path.get_surface_and_rect()[1],)
@@ -364,7 +365,7 @@ class App:
         self.screen.blit(self.algo_box_surface, self.algo_box_surface_rect)
         self.screen.blit(self.control_box_surface, self.control_box_surface_rext)
         self.screen.blit(self.chosen_algo_txt, self.chosen_algo_txt_rect)
-        self.screen.blit(self.time_complexity_txt, self.time_complexity_txt_rext)
+        self.screen.blit(self.time_complexity_txt, self.time_complexity_txt_rect)
         pygame.draw.rect(self.screen, WHITE, self.algo_box_surface_rect, 5)
         pygame.draw.rect(self.screen, WHITE, self.control_box_surface_rext, 5)
         

@@ -29,7 +29,6 @@ class Grid:
 
         row_spacing = self.height / self.rows
         column_spacing = self.width / self.columns
-        print(f"block size: {row_spacing * column_spacing}")
 
         start_pos_rows = 0
         start_pos_columns = 0
