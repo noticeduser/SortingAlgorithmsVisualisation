@@ -1,5 +1,3 @@
-from math import floor
-
 import pygame
 
 from constants import *
