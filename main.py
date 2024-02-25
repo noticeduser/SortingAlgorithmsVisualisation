@@ -26,22 +26,22 @@ class App:
     def __init__(self) -> None:
         pygame.init()
 
-        # Pygame Initialization
+        # Pygame initialisation 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sorting Algorithm Visualisation")
         self.icon = pygame.image.load("images/app_assets/ICON.png").convert_alpha()
         pygame.display.set_icon(self.icon)
 
-        # Font Initialization
+        # Font Initialization initialisation 
         self.title_font = pygame.font.SysFont("Times New Roman", 50)
         self.button_font = pygame.font.SysFont("Trebuchet MS", 15, bold=True)
         self.gui_font = pygame.font.SysFont("Cascadia Code", 25)
 
-        # Pygame Utilities
+        # Pygame Utilities initialisation 
         self.clock = pygame.time.Clock()
         self.running = True
 
-        # Grid Related
+        # Grid Related initialisation 
         self.gridlines_switch = Switch(
             "ON",
             "OFF",
@@ -54,7 +54,7 @@ class App:
         self.grid_slider = Slider((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 212.5), (300, 25), 0.5, 2, 50)
         self.row_and_col_val = None
         
-        # Image Related
+        # Image Related initialisation 
         self.img = ImageProcessing()
         self.img_path = TextBox(25, ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT - 50), BLACK, self.gui_font)
         self.textbox_switch = Switch(
@@ -67,11 +67,12 @@ class App:
             ((BARRIER_PADDING_X_LEFT / 2) - 125, HEIGHT - 50),
         )
 
-        # Shuffling, Sorting and Algorithm selection
+        # Shuffling, Sorting and Algorithm selection initialisation 
         self.index_grid_pos = None
         self.sort_time_start = 0
         self.sort_time_end = 0
         self.sort_time_elapsed = 0
+        
         self.shuffle_button = Button(
             "SHUFFLE",
             GREEN,
@@ -176,13 +177,13 @@ class App:
         self.time_complexity = None
         self.sort_generator = None
         
-        # Conditionals
+        # Conditionals initialisation 
         self.img_added = False
         self.selected_grid_size = False
         self.sorting = False
         self.sorted = True
         
-        # Surfaces
+        # Surfaces initialisation 
         self.options_surface = pygame.Surface((325, 75))
         self.options_surface_rect = self.options_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 200)))
         
@@ -195,7 +196,7 @@ class App:
         self.information_surface = pygame.Surface((325, 125))
         self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT - 175.75)))
         
-        # Text        
+        # Text initialisation        
         self.invalid_entry_txt = self.gui_font.render("INVALID ENTRY!", True, RED)
         self.invalid_entry_txt_rect = self.invalid_entry_txt.get_rect(center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2))
         
@@ -214,7 +215,7 @@ class App:
         self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
         self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
             
-        # Arrays
+        # Arrays initialisation 
         self.algo_buttons_arr = [
             self.bogo_button,
             self.bubble_button,
@@ -279,7 +280,7 @@ class App:
         else:
             self.grid.set_alpha_min()
 
-        
+        # Image processing and setup
         if not self.sorting:
             self.textbox_switch.get_clicked()
 
@@ -305,9 +306,9 @@ class App:
                         self.index_grid_pos = get_index_grid_pos(self.grid.block_objects)
                         self.img_added = True
                     else:
-                        self.screen.blit(self.invalid_entry_txt, self.invalid_entry_txt_rect)
+                        self.screen.blit(self.invalid_entry_txt, self.invalid_entry_txt_rect) #Invalid file format attempted to be uploaded.
                 except FileNotFoundError:
-                    self.screen.blit(self.invalid_path_txt, self.invalid_path_txt_rect)
+                    self.screen.blit(self.invalid_path_txt, self.invalid_path_txt_rect) #Accepted file format, but file destination doesn't exist.
 
         # Choosing Algorithm
         sort_dict = {
@@ -391,7 +392,8 @@ class App:
         
         self.clock.tick(FPS)
         pygame.display.update()
-
+        
+    # Draws the grid, textbox, surfaces and text to the screen.
     def draw(self):
         # Grid
         self.screen.fill(DARK_GRAY)

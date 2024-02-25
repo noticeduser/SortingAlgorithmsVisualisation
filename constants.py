@@ -2,7 +2,7 @@
 WIDTH = 1600
 HEIGHT = 900
 
-FPS = 60
+FPS = 75
 
 # Grid Specs
 GRID_WIDTH = 500
