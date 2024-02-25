@@ -404,7 +404,7 @@ class App:
         # Image shuffling, sorting, stopping and algorithms
         for surface in self.surface_arr:
             self.screen.blit(surface[0], surface[1])
-            pygame.draw.rect(self.screen, WHITE, surface[1], 5)
+            pygame.draw.rect(self.screen, WHITE, surface[1], 3)
         
         for text in self.text_arr:
             self.screen.blit(text[0], text[1])
