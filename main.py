@@ -14,6 +14,7 @@ from algorithms.selection_sort import selection_sort
 from algorithms.shell_sort import shell_sort
 from block import *
 from constants import *
+from database.algo_database import AlgorithmDatabase
 from grid import Grid
 from image import ImageProcessing
 from ui_elements.button import Button
@@ -177,11 +178,34 @@ class App:
         self.time_complexity = None
         self.sort_generator = None
         
+        # Database initialisation
+        self.algorithm_db = AlgorithmDatabase()
+        self.upload_button = Button(
+            "UPLOAD",
+            GREEN,
+            LIGHT_GREEN,
+            self.button_font,
+            (100, 50),
+            ((WIDTH - 375 , HEIGHT_MIDPOINT + 200),
+        ))
+        self.clear_button = Button(
+            "CLEAR DB",
+            RED,
+            LIGHT_RED,
+            self.button_font,
+            (100, 50),
+            ((WIDTH - 175 , HEIGHT_MIDPOINT + 200),
+        ))
+        self.time_data = self.algorithm_db.get_time_data()
+
+        
         # Conditionals initialisation 
         self.img_added = False
         self.selected_grid_size = False
         self.sorting = False
+        self.sort_completed = False
         self.sorted = True
+        self.data_uploaded = False
         
         # Surfaces initialisation 
         self.options_surface = pygame.Surface((325, 75))
@@ -193,8 +217,8 @@ class App:
         self.control_box_surface = pygame.Surface((325, 75))
         self.control_box_surface_rect = self.control_box_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200)))
         
-        self.information_surface = pygame.Surface((325, 125))
-        self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT - 175.75)))
+        self.information_surface = pygame.Surface((325, 500))
+        self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT)))
         
         # Text initialisation        
         self.invalid_entry_txt = self.gui_font.render("INVALID ENTRY!", True, RED)
@@ -214,6 +238,20 @@ class App:
         
         self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
         self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
+        
+        self.comparison_txt = self.gui_font.render("Slowest VS Fastest Sorts", True, WHITE)
+        self.comparison_txt_rect = self.comparison_txt.get_rect(center=(WIDTH - 275, HEIGHT_MIDPOINT - 90))
+        
+        if len(self.time_data) != 0:
+            self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}    {self.time_data[1][0]}", True, WHITE)
+            self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 65.5))
+                
+            self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks    {self.time_data[1][1]} blocks", True, WHITE)
+            self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 41))
+                
+            self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds    {self.time_data[1][2]} seconds", True, WHITE)
+            self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 16.5))
+        
             
         # Arrays initialisation 
         self.algo_buttons_arr = [
@@ -232,6 +270,8 @@ class App:
             self.shuffle_button,
             self.sort_button,
             self.stop_button,
+            self.upload_button,
+            self.clear_button,
             self.textbox_switch,
             self.gridlines_switch,
         ]
@@ -243,12 +283,6 @@ class App:
             [self.information_surface, self.information_surface_rect],
         ]
         
-        self.text_arr = [
-            [self.chosen_algo_txt, self.chosen_algo_txt_rect],
-            [self.time_complexity_txt, self.time_complexity_txt_rect],
-            [self.grid_size_txt, self.grid_size_txt_rect],
-            [self.sorting_time_txt, self.sorting_time_txt_rect],
-        ]
 
     def run(self):
         while self.running:
@@ -312,15 +346,15 @@ class App:
 
         # Choosing Algorithm
         sort_dict = {
-            self.bubble_button: (bubble_sort(self.grid.block_objects), "Bubble Sort", "O(n^2)"),
-            self.bogo_button: (bogo_sort(self.grid.block_objects, self.index_grid_pos), "Bogo Sort", "O((n+1)!)"),
-            self.selection_button: (selection_sort(self.grid.block_objects), "Selection Sort", "O(n^2)"),
-            self.insertion_button: (insertion_sort(self.grid.block_objects), "Insertion Sort", "O(n^2)"),
-            self.shell_button: (shell_sort(self.grid.block_objects), "Shell Sort", "O(n^1.5)"),
-            self.heap_button: (heap_sort(self.grid.block_objects), "Heap Sort", "O(n log n)"),
-            self.merge_button: (merge_sort(self.grid.block_objects, self.index_grid_pos), "Merge Sort", "O(n log n)"),
-            self.quick_button: (quick_sort(self.grid.block_objects), "Quick Sort", "O(n log n)"),
-            self.radix_button: (radix_sort(self.grid.block_objects, self.index_grid_pos), "Radix Sort", "O(n)"),
+            self.bubble_button: (bubble_sort(self.grid.block_objects), 'Bubble Sort', 'O(n^2)'),
+            self.bogo_button: (bogo_sort(self.grid.block_objects, self.index_grid_pos), 'Bogo Sort', 'O((n+1)!)'),
+            self.selection_button: (selection_sort(self.grid.block_objects), 'Selection Sort', 'O(n^2)'),
+            self.insertion_button: (insertion_sort(self.grid.block_objects), 'Insertion Sort', 'O(n^2)'),
+            self.shell_button: (shell_sort(self.grid.block_objects), 'Shell Sort', 'O(n^1.5)'),
+            self.heap_button: (heap_sort(self.grid.block_objects), 'Heap Sort', 'O(n log n)'),
+            self.merge_button: (merge_sort(self.grid.block_objects, self.index_grid_pos), 'Merge Sort', 'O(n log n)'),
+            self.quick_button: (quick_sort(self.grid.block_objects), 'Quick Sort', 'O(n log n)'),
+            self.radix_button: (radix_sort(self.grid.block_objects, self.index_grid_pos), 'Radix Sort', 'O(n)'),
             }
         
         for button in self.algo_buttons_arr:
@@ -347,6 +381,7 @@ class App:
             # Shuffling
             if self.shuffle_button.clicked and not self.sorting:
                 shuffle_pos(self.grid.block_objects, self.index_grid_pos)
+                self.sort_completed = False
                 self.sorted = False
                 self.shuffle_button.clicked = False
         
@@ -359,7 +394,9 @@ class App:
                     next(self.sort_generator)
                 except StopIteration:
                     self.sorted = True
+                    self.sort_completed = True
                     self.sorting = False
+                    self.data_uploaded = False
                     self.sort_generator = None
                     self.sort_time_end = pygame.time.get_ticks()
                     self.sort_time_elapsed = (self.sort_time_end - self.sort_time_start) / 1000 # ticks are measured in milliseconds
@@ -369,25 +406,51 @@ class App:
             # Stopping
             if self.stop_button.clicked:
                 self.sorting = False
+                
+            # Uploading and Clearing results to and from the Database
+            if self.upload_button.clicked and self.sort_completed and not self.sorting and not self.data_uploaded:
+                self.algorithm_db.append_database(self.chosen_algo, self.time_complexity, self.row_and_col_val ** 2, self.sort_time_elapsed)
+                self.time_data = self.algorithm_db.get_time_data()
+                        
+                self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}    {self.time_data[1][0]}", True, WHITE)
+                self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 65.5))
+                
+                self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks    {self.time_data[1][1]} blocks", True, WHITE)
+                self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 41))
+                
+                self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds    {self.time_data[1][2]} seconds", True, WHITE)
+                self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 16.5))
+                
+                self.data_uploaded = True
+                
+            if self.clear_button.clicked and not self.sorting:
+                self.algorithm_db.clear_database()
+                self.time_data = self.algorithm_db.get_time_data()
         
         # Updates to Images on screen
         for block in self.grid.block_objects:
             block.draw_block(self.grid.image_surface)
 
-        # Update Arrarys
-        self.surface_arr = [
-            [self.options_surface, self.options_surface_rect],
-            [self.algo_box_surface, self.algo_box_surface_rect],
-            [self.control_box_surface, self.control_box_surface_rect],
-            [self.information_surface, self.information_surface_rect],
-        ]
-        
-        self.text_arr = [
-            [self.chosen_algo_txt, self.chosen_algo_txt_rect],
-            [self.time_complexity_txt, self.time_complexity_txt_rect],
-            [self.grid_size_txt, self.grid_size_txt_rect],
-            [self.sorting_time_txt, self.sorting_time_txt_rect],
-        ]
+        # Update Text
+        if len(self.time_data) != 0:
+            self.text_arr = [
+                [self.chosen_algo_txt, self.chosen_algo_txt_rect],
+                [self.time_complexity_txt, self.time_complexity_txt_rect],
+                [self.grid_size_txt, self.grid_size_txt_rect],
+                [self.sorting_time_txt, self.sorting_time_txt_rect],
+                [self.comparison_txt, self.comparison_txt_rect],
+                [self.time_data_algo_txt, self.time_data_algo_txt_rect],
+                [self.time_data_size_txt, self.time_data_size_txt_rect],
+                [self.time_data_tt_txt, self.time_data_tt_txt_rect],
+            ]
+        else:
+            self.text_arr = [
+                [self.chosen_algo_txt, self.chosen_algo_txt_rect],
+                [self.time_complexity_txt, self.time_complexity_txt_rect],
+                [self.grid_size_txt, self.grid_size_txt_rect],
+                [self.sorting_time_txt, self.sorting_time_txt_rect],
+                [self.comparison_txt, self.comparison_txt_rect],
+            ]
         
         
         self.clock.tick(FPS)
