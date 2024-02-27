@@ -50,7 +50,6 @@ class Button:
         self.surface.fill(colour)
         self.surface.blit(self.text_rendered, self.text_rect)
 
-
     def update_colour(self, colour):
         self.surface.fill(colour)
         self.surface.blit(self.text_rendered, self.text_rect)

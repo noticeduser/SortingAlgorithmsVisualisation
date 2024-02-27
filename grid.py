@@ -15,7 +15,6 @@ class Grid:
         self.image_surface = pygame.Surface((width, height), pygame.SRCALPHA)
         self.block_objects = []
 
-
     def set_row_column_spacing(self):
         row_spacing = round(self.height / self.rows)
         column_spacing = round(self.width / self.columns)

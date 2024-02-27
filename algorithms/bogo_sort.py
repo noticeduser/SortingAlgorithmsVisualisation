@@ -7,6 +7,7 @@ def is_sorted(arr):
             return False
     return True
 
+
 def bogo_sort(arr, index_grid_pos):
     while not is_sorted(arr):
         shuffle(arr)
@@ -15,4 +16,3 @@ def bogo_sort(arr, index_grid_pos):
             block.row = row
             block.column = column
         yield arr
-

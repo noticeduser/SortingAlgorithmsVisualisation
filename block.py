@@ -14,7 +14,7 @@ class Block:
         self.height = height
         self.value = value
         self.img = pygame.image.load(img_path)
-    
+
     # positions blocks on screen based on their x and y coords
     def draw_block(self, screen):
         x = self.column * self.width
@@ -31,7 +31,8 @@ def get_index_grid_pos(blocks_lst):
 
     return index_grid_pos
 
-# shuffles the pos of block objects and updates their row and column values.  
+
+# shuffles the pos of block objects and updates their row and column values.
 def shuffle_pos(blocks_lst, index_grid_pos):
     shuffle(blocks_lst)
     for i, b in enumerate(blocks_lst):

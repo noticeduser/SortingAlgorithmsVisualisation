@@ -24,6 +24,7 @@ def counting_sort(arr, digit, index_grid_pos):
         arr[i].column = column
         yield True
 
+
 def radix_sort(arr, index_grid_pos):
     max_num = max(block.value for block in arr)
     digit = 1
