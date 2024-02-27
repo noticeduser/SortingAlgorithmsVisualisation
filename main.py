@@ -197,6 +197,7 @@ class App:
             ((WIDTH - 175 , HEIGHT_MIDPOINT + 200),
         ))
         self.time_data = self.algorithm_db.get_time_data()
+        self.average_sort = None
 
         
         # Conditionals initialisation 
@@ -217,8 +218,8 @@ class App:
         self.control_box_surface = pygame.Surface((325, 75))
         self.control_box_surface_rect = self.control_box_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200)))
         
-        self.information_surface = pygame.Surface((325, 500))
-        self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT)))
+        self.information_surface = pygame.Surface((325, 300))
+        self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275,  HEIGHT_MIDPOINT - 90)))
         
         # Text initialisation        
         self.invalid_entry_txt = self.gui_font.render("INVALID ENTRY!", True, RED)
@@ -240,17 +241,17 @@ class App:
         self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
         
         self.comparison_txt = self.gui_font.render("Slowest VS Fastest Sorts", True, WHITE)
-        self.comparison_txt_rect = self.comparison_txt.get_rect(center=(WIDTH - 275, HEIGHT_MIDPOINT - 90))
+        self.comparison_txt_rect = self.comparison_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 65))
         
         if len(self.time_data) != 0:
-            self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}    {self.time_data[1][0]}", True, WHITE)
-            self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 65.5))
+            self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE)
+            self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25))
                 
-            self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks    {self.time_data[1][1]} blocks", True, WHITE)
-            self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 41))
+            self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE)
+            self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT))
                 
-            self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds    {self.time_data[1][2]} seconds", True, WHITE)
-            self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 16.5))
+            self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE)
+            self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25))
         
             
         # Arrays initialisation 
@@ -363,6 +364,10 @@ class App:
             
             if button.clicked and not self.sorting:
                 self.sort_generator, self.chosen_algo, self.time_complexity = sort_dict[button]
+                if isinstance(self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val ** 2), float):
+                    self.average_sort = round(self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val ** 2), 2)
+                else:
+                    self.average_sort = None
                 self.sort_time_elapsed = 0
             
             self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
@@ -373,6 +378,9 @@ class App:
             
             self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
             self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
+            
+            self.average_sort_txt = self.gui_font.render(f"Avg Sorting Time: {self.average_sort} seconds", True, WHITE)
+            self.average_sort_txt_rect = self.average_sort_txt.get_rect(midleft = (WIDTH - 412.5, HEIGHT_MIDPOINT - 114.5))
 
         for button in self.control_buttons_arr:
             if self.img_added:
@@ -412,14 +420,14 @@ class App:
                 self.algorithm_db.append_database(self.chosen_algo, self.time_complexity, self.row_and_col_val ** 2, self.sort_time_elapsed)
                 self.time_data = self.algorithm_db.get_time_data()
                         
-                self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}    {self.time_data[1][0]}", True, WHITE)
-                self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 65.5))
-                
-                self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks    {self.time_data[1][1]} blocks", True, WHITE)
-                self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 41))
-                
-                self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds    {self.time_data[1][2]} seconds", True, WHITE)
-                self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(center=(WIDTH -  275, HEIGHT_MIDPOINT - 16.5))
+                self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE)
+                self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25))
+                    
+                self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE)
+                self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT))
+                    
+                self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE)
+                self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25))
                 
                 self.data_uploaded = True
                 
@@ -442,6 +450,7 @@ class App:
                 [self.time_data_algo_txt, self.time_data_algo_txt_rect],
                 [self.time_data_size_txt, self.time_data_size_txt_rect],
                 [self.time_data_tt_txt, self.time_data_tt_txt_rect],
+                [self.average_sort_txt, self.average_sort_txt_rect],
             ]
         else:
             self.text_arr = [
@@ -450,6 +459,7 @@ class App:
                 [self.grid_size_txt, self.grid_size_txt_rect],
                 [self.sorting_time_txt, self.sorting_time_txt_rect],
                 [self.comparison_txt, self.comparison_txt_rect],
+                [self.average_sort_txt, self.average_sort_txt_rect],
             ]
         
         
