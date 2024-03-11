@@ -14,10 +14,10 @@ class ImageProcessing:
         self.img_name = None
         self.img_size = None
         self.return_path = None
-        self.blocks = []
+        self.block_images = []
 
     # Image Processing Methods
-    def split_into_blocks(self, num_rows, num_columns, row_spacing, column_spacing):
+    def subdivide_img(self, num_rows, num_columns, row_spacing, column_spacing):
         os.mkdir(self.return_path)
         if self.img_size != GRID_DIMENSIONS:
             self.crop_image()
@@ -33,8 +33,9 @@ class ImageProcessing:
                 block_img = self.img.crop((left, upper, right, lower))
                 block_path = f"{self.return_path}/block_{row}_{col}.png"
                 block_img.save(block_path)
-                self.blocks.append((block_path, row, col, value))
+                self.block_images.append((block_path, row, col, value))
                 value += 1
+                
 
     def crop_image(self):
         self.img = self.img.resize((GRID_WIDTH, GRID_HEIGHT))
@@ -79,4 +80,4 @@ class ImageProcessing:
         self.img_name = os.path.basename(path)[:-4]
         self.return_path = f"images/user_images/{self.img_name}_{self.get_time()}"
         self.img_size = self.img.size
-        self.blocks.clear()
+        self.block_images.clear()

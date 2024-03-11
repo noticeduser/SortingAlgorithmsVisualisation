@@ -20,6 +20,7 @@ class Block:
         x = self.column * self.width
         y = self.row * self.height
         screen.blit(self.img, (x, y))
+    
 
 
 # BLOCK RELATED FUNCTIONS
@@ -37,3 +38,4 @@ def shuffle_pos(blocks_lst, index_grid_pos):
     shuffle(blocks_lst)
     for i, b in enumerate(blocks_lst):
         b.row, b.column = index_grid_pos[i]
+        print(b.row, b.column)

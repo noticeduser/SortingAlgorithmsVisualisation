@@ -18,6 +18,9 @@ class AlgorithmDatabase:
         self.cursor.execute("SELECT * FROM algorithms")
         self.results = self.cursor.fetchall()
         self.connection.commit()
+        
+        for row in self.results:
+            print(row)
         return self.results
 
     def get_time_data(self):
@@ -41,3 +44,7 @@ class AlgorithmDatabase:
         average_sorting_time = self.cursor.fetchone()[0]
         self.connection.commit()
         return average_sorting_time
+
+testdb = AlgorithmDatabase()
+
+print(testdb.get_results())

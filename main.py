@@ -24,6 +24,8 @@ from ui_elements.textbox import TextBox
 
 
 class App:
+    """Main application class for sorting algorithm visualisation."""
+    
     def __init__(self) -> None:
         pygame.init()
 
@@ -52,12 +54,22 @@ class App:
             (300, 25),
             (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 188),
         )
-        self.grid_slider = Slider((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 212.5), (300, 25), 0.5, 2, 50)
+
+        self.grid_slider = Slider(
+            (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 212.5),
+            (300, 25),
+            0.5,
+            2,
+            50,
+        )
+
         self.row_and_col_val = None
 
         # Image Related initialisation
         self.img = ImageProcessing()
-        self.img_path = TextBox(25, ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT - 50), BLACK, self.gui_font)
+        self.img_path = TextBox(
+            25, ((BARRIER_PADDING_X_LEFT / 2) - 100, HEIGHT - 50), BLACK, self.gui_font
+        )
         self.textbox_switch = Switch(
             "ADD",
             "DEL",
@@ -90,7 +102,14 @@ class App:
             (100, 50),
             (BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200),
         )
-        self.stop_button = Button("STOP", RED, LIGHT_RED, self.button_font, (100, 50), ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT + 200))
+        self.stop_button = Button(
+            "STOP",
+            RED,
+            LIGHT_RED,
+            self.button_font,
+            (100, 50),
+            ((BARRIER_PADDING_X_LEFT / 2) + 100, HEIGHT_MIDPOINT + 200),
+        )
 
         self.bogo_button = Button(
             "Bogo",
@@ -173,8 +192,24 @@ class App:
 
         # Database initialisation
         self.algorithm_db = AlgorithmDatabase()
-        self.upload_button = Button("UPLOAD", GREEN, LIGHT_GREEN, self.button_font, (100, 50), ((WIDTH - 375, HEIGHT_MIDPOINT + 200),))
-        self.clear_button = Button("CLEAR DB", RED, LIGHT_RED, self.button_font, (100, 50), ((WIDTH - 175, HEIGHT_MIDPOINT + 200),))
+        self.upload_button = Button(
+            "UPLOAD",
+            GREEN,
+            LIGHT_GREEN,
+            self.button_font,
+            (100, 50),
+            ((WIDTH - 375, HEIGHT_MIDPOINT + 200),),
+        )
+
+        self.clear_button = Button(
+            "CLEAR DB",
+            RED,
+            LIGHT_RED,
+            self.button_font,
+            (100, 50),
+            ((WIDTH - 175, HEIGHT_MIDPOINT + 200),),
+        )
+
         self.time_data = self.algorithm_db.get_time_data()
         self.average_sort = None
 
@@ -188,51 +223,93 @@ class App:
 
         # Surfaces initialisation
         self.options_surface = pygame.Surface((325, 75))
-        self.options_surface_rect = self.options_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 200)))
+        self.options_surface_rect = self.options_surface.get_rect(
+            center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT - 200))
+        )
 
         self.algo_box_surface = pygame.Surface((325, 175))
-        self.algo_box_surface_rect = self.algo_box_surface.get_rect(center=(BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT))
+        self.algo_box_surface_rect = self.algo_box_surface.get_rect(
+            center=(BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT)
+        )
 
         self.control_box_surface = pygame.Surface((325, 75))
-        self.control_box_surface_rect = self.control_box_surface.get_rect(center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200)))
+        self.control_box_surface_rect = self.control_box_surface.get_rect(
+            center=((BARRIER_PADDING_X_LEFT / 2, HEIGHT_MIDPOINT + 200))
+        )
 
         self.information_surface = pygame.Surface((325, 300))
-        self.information_surface_rect = self.information_surface.get_rect(center=((WIDTH - 275, HEIGHT_MIDPOINT - 90)))
+        self.information_surface_rect = self.information_surface.get_rect(
+            center=((WIDTH - 275, HEIGHT_MIDPOINT - 90))
+        )
 
         self.db_control_surface = pygame.Surface((325, 75))
-        self.db_control_surface_rect = self.db_control_surface.get_rect(center=(WIDTH - 275, HEIGHT_MIDPOINT + 200))
+        self.db_control_surface_rect = self.db_control_surface.get_rect(
+            center=(WIDTH - 275, HEIGHT_MIDPOINT + 200)
+        )
 
         # Text initialisation
         self.invalid_entry_txt = self.gui_font.render("INVALID ENTRY!", True, RED)
-        self.invalid_entry_txt_rect = self.invalid_entry_txt.get_rect(center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2))
+        self.invalid_entry_txt_rect = self.invalid_entry_txt.get_rect(
+            center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2)
+        )
 
         self.invalid_path_txt = self.gui_font.render("DIRECTORY DOES NOT EXIST!", True, RED)
-        self.invalid_path_txt_rect = self.invalid_path_txt.get_rect(center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2))
+        self.invalid_path_txt_rect = self.invalid_path_txt.get_rect(
+            center=(WIDTH_MIDPOINT, BARRIER_PADDING_Y_TOP // 2)
+        )
 
         self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-        self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(midleft=((WIDTH - 412.5, HEIGHT_MIDPOINT - 212.5)))
+        self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(
+            midleft=((WIDTH - 412.5, HEIGHT_MIDPOINT - 212.5))
+        )
 
-        self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
-        self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 188))
+        self.time_complexity_txt = self.gui_font.render(
+            f"Time Complexity: {self.time_complexity}", True, WHITE
+        )
+        self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(
+            midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 188)
+        )
 
-        self.grid_size_txt = self.gui_font.render(f"Grid Size: {self.row_and_col_val}x{self.row_and_col_val}", True, WHITE)
-        self.grid_size_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 163.5))
+        self.grid_size_txt = self.gui_font.render(
+            f"Grid Size: {self.row_and_col_val}x{self.row_and_col_val}", True, WHITE
+        )
+        self.grid_size_txt_rect = self.grid_size_txt.get_rect(
+            midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 163.5)
+        )
 
-        self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
-        self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
+        self.sorting_time_txt = self.gui_font.render(
+            f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE
+        )
+        self.sorting_time_txt_rect = self.grid_size_txt.get_rect(
+            midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139)
+        )
 
         self.comparison_txt = self.gui_font.render("Slowest VS Fastest Sorts", True, WHITE)
-        self.comparison_txt_rect = self.comparison_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 65))
+        self.comparison_txt_rect = self.comparison_txt.get_rect(
+            midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 65)
+        )
 
         if len(self.time_data) != 0:
-            self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE)
-            self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25))
+            self.time_data_algo_txt = self.gui_font.render(
+                f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE
+            )
+            self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25)
+            )
 
-            self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE)
-            self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT))
+            self.time_data_size_txt = self.gui_font.render(
+                f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE
+            )
+            self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT)
+            )
 
-            self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE)
-            self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25))
+            self.time_data_tt_txt = self.gui_font.render(
+                f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE
+            )
+            self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25)
+            )
 
         # Arrays initialisation
         self.algo_buttons_arr = [
@@ -266,16 +343,17 @@ class App:
         ]
 
     def run(self):
+        """Main loop of the application."""
         while self.running:
-            self.update()
-            self.draw()
-        self.close()
+            self.update() # Update application state
+            self.draw() # Draw the application
+        self.close() # Close pygame on exit
 
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.img.del_images()
-                self.running = False
+                self.running = False # Set running flag to False on quit
 
         # Grid Setup
         self.grid_slider.render(self.screen)
@@ -284,8 +362,12 @@ class App:
             self.grid_slider.move_slider()
             self.row_and_col_val = self.grid_slider.get_value()
             self.grid = Grid(GRID_WIDTH, GRID_HEIGHT, self.row_and_col_val, self.row_and_col_val)
-            self.grid_size_txt = self.gui_font.render(f"Grid Size: {self.row_and_col_val} x {self.row_and_col_val}", True, WHITE)
-            self.grid_size_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 163.5))
+            self.grid_size_txt = self.gui_font.render(
+                f"Grid Size: {self.row_and_col_val} x {self.row_and_col_val}", True, WHITE
+            )
+            self.grid_size_txt_rect = self.grid_size_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 163.5)
+            )
 
         # Gridlines Transparency
         self.gridlines_switch.get_clicked()
@@ -308,13 +390,13 @@ class App:
                 try:
                     if self.img.verify_extension(r"{}".format(paste())):
                         self.img.update_img(paste())
-                        self.img.split_into_blocks(
+                        self.img.subdivide_img(
                             self.grid.rows,
                             self.grid.columns,
                             self.grid.row_spacing,
                             self.grid.column_spacing,
                         )
-                        for i in self.img.blocks:
+                        for i in self.img.block_images:
                             block = Block(
                                 i[0],
                                 i[1],
@@ -328,21 +410,61 @@ class App:
                         self.index_grid_pos = get_index_grid_pos(self.grid.block_objects)
                         self.img_added = True
                     else:
-                        self.screen.blit(self.invalid_entry_txt, self.invalid_entry_txt_rect)  # Invalid file format attempted to be uploaded.
+                        self.screen.blit(
+                            self.invalid_entry_txt, self.invalid_entry_txt_rect
+                        )  # Invalid file format attempted to be uploaded.
                 except FileNotFoundError:
-                    self.screen.blit(self.invalid_path_txt, self.invalid_path_txt_rect)  # Accepted file format, but file destination doesn't exist.
+                    self.screen.blit(
+                        self.invalid_path_txt, self.invalid_path_txt_rect
+                    )  # Accepted file format, but file destination doesn't exist.
 
         # Choosing Algorithm
         sort_dict = {
-            self.bubble_button: (bubble_sort(self.grid.block_objects), "Bubble Sort", "O(n^2)"),
-            self.bogo_button: (bogo_sort(self.grid.block_objects, self.index_grid_pos), "Bogo Sort", "O((n+1)!)"),
-            self.selection_button: (selection_sort(self.grid.block_objects), "Selection Sort", "O(n^2)"),
-            self.insertion_button: (insertion_sort(self.grid.block_objects), "Insertion Sort", "O(n^2)"),
-            self.shell_button: (shell_sort(self.grid.block_objects), "Shell Sort", "O(n^1.5)"),
-            self.heap_button: (heap_sort(self.grid.block_objects), "Heap Sort", "O(n log n)"),
-            self.merge_button: (merge_sort(self.grid.block_objects, self.index_grid_pos), "Merge Sort", "O(n log n)"),
-            self.quick_button: (quick_sort(self.grid.block_objects), "Quick Sort", "O(n log n)"),
-            self.radix_button: (radix_sort(self.grid.block_objects, self.index_grid_pos), "Radix Sort", "O(n)"),
+            self.bubble_button: (
+                bubble_sort(self.grid.block_objects),
+                "Bubble Sort",
+                "O(n^2)",
+            ),
+            self.bogo_button: (
+                bogo_sort(self.grid.block_objects, self.index_grid_pos),
+                "Bogo Sort",
+                "O((n+1)!)",
+            ),
+            self.selection_button: (
+                selection_sort(self.grid.block_objects),
+                "Selection Sort",
+                "O(n^2)",
+            ),
+            self.insertion_button: (
+                insertion_sort(self.grid.block_objects),
+                "Insertion Sort",
+                "O(n^2)",
+            ),
+            self.shell_button: (
+                shell_sort(self.grid.block_objects),
+                "Shell Sort",
+                "O(n^1.5)",
+            ),
+            self.heap_button: (
+                heap_sort(self.grid.block_objects),
+                "Heap Sort",
+                "O(n log n)",
+            ),
+            self.merge_button: (
+                merge_sort(self.grid.block_objects, self.index_grid_pos),
+                "Merge Sort",
+                "O(n log n)",
+            ),
+            self.quick_button: (
+                quick_sort(self.grid.block_objects),
+                "Quick Sort",
+                "O(n log n)",
+            ),
+            self.radix_button: (
+                radix_sort(self.grid.block_objects, self.index_grid_pos),
+                "Radix Sort",
+                "O(n)",
+            ),
         }
 
         for button in self.algo_buttons_arr:
@@ -351,23 +473,40 @@ class App:
 
             if button.clicked and not self.sorting:
                 self.sort_generator, self.chosen_algo, self.time_complexity = sort_dict[button]
-                if isinstance(self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val**2), float):
-                    self.average_sort = round(self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val**2), 2)
+                if isinstance(
+                    self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val**2), float,):
+                    self.average_sort = round(self.algorithm_db.get_avg_sorting_time(self.chosen_algo, self.row_and_col_val**2), 2,)
                 else:
                     self.average_sort = None
                 self.sort_time_elapsed = 0
 
-            self.chosen_algo_txt = self.gui_font.render(f"Algorithm: {self.chosen_algo}", True, WHITE)
-            self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(midleft=((WIDTH - 412.5, HEIGHT_MIDPOINT - 212.5)))
+            self.chosen_algo_txt = self.gui_font.render(
+                f"Algorithm: {self.chosen_algo}", True, WHITE
+            )
+            self.chosen_algo_txt_rect = self.chosen_algo_txt.get_rect(
+                midleft=((WIDTH - 412.5, HEIGHT_MIDPOINT - 212.5))
+            )
 
-            self.time_complexity_txt = self.gui_font.render(f"Time Complexity: {self.time_complexity}", True, WHITE)
-            self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 188))
+            self.time_complexity_txt = self.gui_font.render(
+                f"Time Complexity: {self.time_complexity}", True, WHITE
+            )
+            self.time_complexity_txt_rect = self.chosen_algo_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 188)
+            )
 
-            self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
-            self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
+            self.sorting_time_txt = self.gui_font.render(
+                f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE
+            )
+            self.sorting_time_txt_rect = self.grid_size_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139)
+            )
 
-            self.average_sort_txt = self.gui_font.render(f"Avg Sorting Time: {self.average_sort} seconds", True, WHITE)
-            self.average_sort_txt_rect = self.average_sort_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 114.5))
+            self.average_sort_txt = self.gui_font.render(
+                f"Avg Sorting Time: {self.average_sort} seconds", True, WHITE
+            )
+            self.average_sort_txt_rect = self.average_sort_txt.get_rect(
+                midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 114.5)
+            )
 
         for button in self.control_buttons_arr:
             if self.img_added:
@@ -395,26 +534,52 @@ class App:
                     self.sort_generator = None
                     self.sort_time_end = pygame.time.get_ticks()
                     self.sort_time_elapsed = (self.sort_time_end - self.sort_time_start) / 1000  # ticks are measured in milliseconds
-                    self.sorting_time_txt = self.gui_font.render(f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE)
-                    self.sorting_time_txt_rect = self.grid_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139))
+                    self.sorting_time_txt = self.gui_font.render(
+                        f"Sorting Time: {self.sort_time_elapsed:.2f} seconds", True, WHITE
+                    )
+                    self.sorting_time_txt_rect = self.grid_size_txt.get_rect(
+                        midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 139)
+                    )
 
             # Stopping
             if self.stop_button.clicked:
                 self.sorting = False
 
             # Uploading and Clearing results to and from the Database
-            if self.upload_button.clicked and self.sort_completed and not self.sorting and not self.data_uploaded:
-                self.algorithm_db.append_database(self.chosen_algo, self.time_complexity, self.row_and_col_val**2, self.sort_time_elapsed)
+            if (
+                self.upload_button.clicked
+                and self.sort_completed
+                and not self.sorting
+                and not self.data_uploaded
+            ):
+                self.algorithm_db.append_database(
+                    self.chosen_algo,
+                    self.time_complexity,
+                    self.row_and_col_val**2,
+                    self.sort_time_elapsed,
+                )
                 self.time_data = self.algorithm_db.get_time_data()
 
-                self.time_data_algo_txt = self.gui_font.render(f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE)
-                self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25))
+                self.time_data_algo_txt = self.gui_font.render(
+                    f"{self.time_data[0][0]}, {self.time_data[1][0]}", True, WHITE
+                )
+                self.time_data_algo_txt_rect = self.time_data_algo_txt.get_rect(
+                    midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT - 25)
+                )
 
-                self.time_data_size_txt = self.gui_font.render(f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE)
-                self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT))
+                self.time_data_size_txt = self.gui_font.render(
+                    f"{self.time_data[0][1]} blocks, {self.time_data[1][1]} blocks", True, WHITE
+                )
+                self.time_data_size_txt_rect = self.time_data_size_txt.get_rect(
+                    midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT)
+                )
 
-                self.time_data_tt_txt = self.gui_font.render(f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE)
-                self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25))
+                self.time_data_tt_txt = self.gui_font.render(
+                    f"{self.time_data[0][2]} seconds, {self.time_data[1][2]} seconds", True, WHITE
+                )
+                self.time_data_tt_txt_rect = self.time_data_tt_txt.get_rect(
+                    midleft=(WIDTH - 412.5, HEIGHT_MIDPOINT + 25)
+                )
 
                 self.data_uploaded = True
 

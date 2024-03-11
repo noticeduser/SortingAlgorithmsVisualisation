@@ -10,7 +10,6 @@ class Grid:
         self.rows = rows
         self.columns = columns
         self.column_spacing, self.row_spacing = self.set_row_column_spacing()
-        self.block_size = self.row_spacing * self.column_spacing
         self.gridlines_surface = self.draw_gridlines()
         self.image_surface = pygame.Surface((width, height), pygame.SRCALPHA)
         self.block_objects = []
